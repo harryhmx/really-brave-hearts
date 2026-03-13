@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Really Brave Hearts (RBH)
+
+> A gamified English learning platform for children aged 6-12 years
+
+## Project Overview
+
+**Really Brave Hearts** is an interactive learning platform designed to make English learning fun and engaging for children. The platform features:
+
+- **4 Difficulty Levels**: Tailored content for different age groups (6-7, 7-8, 8-10, 10-12 years)
+- **6 Question Types**: fix, open, multiple_choice, matching, spelling, audio
+- **Gamification**: Points, levels, achievements, and streak tracking
+- **AI-Powered**: Content generation using Zhipu AI GLM-5
+
+## Migration Status
+
+This is a **rewrite project** migrating from Vue 3 + Django (separate codebases) to a unified Next.js 15 full-stack architecture.
+
+### Previous Architecture
+```
+┌─────────────┐        HTTP API        ┌─────────────┐
+│  Vue 3 SPA  │ ◄─────────────────────► │   Django    │
+│  (前端)      │                          │  (后端)     │
+└─────────────┘                          └─────────────┘
+```
+
+### Current Architecture
+```
+┌────────────────────────────────────────────────┐
+│                Next.js 15 App                  │
+│  ┌─────────────────────────────────────────┐   │
+│  │        Frontend (React + Tailwind)      │   │
+│  └─────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────┐   │
+│  │       API Routes + Server Actions       │   │
+│  └─────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────┐   │
+│  │   Prisma ORM + PostgreSQL (Supabase)    │   │
+│  └─────────────────────────────────────────┘   │
+└────────────────────────────────────────────────┘
+```
+
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| Framework | [Next.js 15](https://nextjs.org/) with App Router |
+| Language | TypeScript |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) |
+| Authentication | [NextAuth.js v5](https://authjs.dev/) |
+| Database | [Prisma ORM](https://www.prisma.io/) + [Supabase](https://supabase.com/) |
+| Deployment | [Vercel](https://vercel.com/) with auto-deploy on push |
+| AI Integration | [Zhipu AI GLM-5](https://open.bigmodel.cn/) |
+
+## Project Structure
+
+```
+really-brave-hearts/
+├── core/                   # Main Next.js application
+│   ├── src/
+│   │   ├── app/           # App Router pages
+│   │   ├── components/    # Reusable components
+│   │   ├── lib/           # Utility functions
+│   │   └── styles/        # Global styles
+│   ├── prisma/            # Database schema
+│   └── public/            # Static assets
+├── docs/                  # Project documentation
+│   ├── execution-log.md   # Development execution log
+│   └── MIGRATION_PLAN.md  # Migration roadmap
+└── .internal/             # Internal documentation
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- PostgreSQL database (local or Vercel Postgres)
+- GitHub account (for deployment)
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone git@github.com:harryhmx/really-brave-hearts.git
+
+# Install dependencies
+npm install
+
+# Set up database
+npx prisma generate
+npx prisma db push
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development Workflow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses an agile development approach with continuous deployment:
 
-## Learn More
+1. **Feature Development**: Declare features in commit messages
+2. **Auto-Deploy**: Push to main → Vercel auto-deploys
+3. **Production Update**: Changes go live immediately after successful deploy
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Check status
+git status
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Make changes and commit
+git add .
+git commit -m "feat: your feature description"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Push and create PR
+git push origin main
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+MIT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Built with ❤️ for young learners
