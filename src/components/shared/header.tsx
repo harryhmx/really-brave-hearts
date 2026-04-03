@@ -46,7 +46,7 @@ export async function Header() {
         </div>
 
         {/* Mobile Menu */}
-        <MobileMenu session={!!session} />
+        <MobileMenu session={!!session?.user} />
       </div>
     </header>
   )
