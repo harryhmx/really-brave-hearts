@@ -38,7 +38,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem-140px)] items-center justify-center px-4">
+    <div className="flex flex-1 items-center justify-center px-4 py-8">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Log In</CardTitle>

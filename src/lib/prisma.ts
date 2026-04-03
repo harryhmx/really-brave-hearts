@@ -5,7 +5,9 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function createPrismaClient() {
   const connectionString = process.env.POSTGRES_PRISMA_URL!;
-  const adapter = new PrismaPg(connectionString);
+  // Remove pgbouncer parameter for direct adapter connection
+  const cleanUrl = connectionString.replace(/[?&]pgbouncer=true/, "");
+  const adapter = new PrismaPg(cleanUrl);
   return new PrismaClient({ adapter });
 }
 

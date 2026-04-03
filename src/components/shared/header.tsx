@@ -20,9 +20,6 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground">
-            Home
-          </Link>
           <Link href="#features" className="transition-colors hover:text-foreground/80 text-foreground/60">
             Features
           </Link>
@@ -34,7 +31,7 @@ export async function Header() {
         {/* Desktop Right Section */}
         <div className="hidden md:flex ml-auto items-center space-x-4">
           <ThemeToggle />
-          {session ? (
+          {!!session?.user ? (
             <LogoutButton />
           ) : (
             <nav className="flex items-center space-x-2">
