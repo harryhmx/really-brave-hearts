@@ -5,8 +5,10 @@ const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
 function createPrismaClient() {
   const connectionString = process.env.POSTGRES_PRISMA_URL!;
-  // Remove pgbouncer parameter for direct adapter connection
-  const cleanUrl = connectionString.replace(/[?&]pgbouncer=true/, "");
+  // Remove pgbouncer param and set sslmode=require for TLS without cert verification
+  const cleanUrl = connectionString
+    .replace(/[?&]pgbouncer=true/, "")
+    .replace("sslmode=require", "sslmode=no-verify");
   const adapter = new PrismaPg(cleanUrl);
   return new PrismaClient({ adapter });
 }
