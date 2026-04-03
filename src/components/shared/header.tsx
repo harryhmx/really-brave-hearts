@@ -20,11 +20,8 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="#features" className="transition-colors hover:text-foreground/80 text-foreground/60">
-            Features
-          </Link>
-          <Link href="#levels" className="transition-colors hover:text-foreground/80 text-foreground/60">
-            Levels
+          <Link href="/dashboard" className="transition-colors hover:text-foreground/80 text-foreground">
+            Dashboard
           </Link>
         </nav>
 
