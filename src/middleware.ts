@@ -1,9 +1,12 @@
-import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default auth((req) => {
-  const { nextUrl, auth: session } = req;
-  const isLoggedIn = !!session;
+export function middleware(request: NextRequest) {
+  const { nextUrl } = request;
+  const sessionToken =
+    request.cookies.get("authjs.session-token") ||
+    request.cookies.get("__Secure-authjs.session-token");
+  const isLoggedIn = !!sessionToken?.value;
 
   const publicRoutes = ["/", "/login", "/register"];
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -17,7 +20,7 @@ export default auth((req) => {
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
