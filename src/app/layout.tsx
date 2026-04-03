@@ -37,10 +37,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className="min-h-[calc(100vh-3.5rem-140px)]">
-            {children}
-          </main>
-          <Footer />
+          <div className="flex min-h-screen flex-col">
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>

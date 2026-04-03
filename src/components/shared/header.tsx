@@ -12,7 +12,7 @@ export async function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 max-w-screen-2xl items-center mx-auto px-4">
         {/* Logo */}
-        <Link href={session ? "/dashboard" : "/"} className="mr-6 flex items-center space-x-2">
+        <Link href="/" className="mr-6 flex items-center space-x-2">
           <span className="font-bold">
             RBH
           </span>
@@ -20,23 +20,15 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {session ? (
-            <Link href="/dashboard" className="transition-colors hover:text-foreground/80 text-foreground">
-              Dashboard
-            </Link>
-          ) : (
-            <>
-              <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground">
-                Home
-              </Link>
-              <Link href="#features" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                Features
-              </Link>
-              <Link href="#levels" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                Levels
-              </Link>
-            </>
-          )}
+          <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground">
+            Home
+          </Link>
+          <Link href="#features" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            Features
+          </Link>
+          <Link href="#levels" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            Levels
+          </Link>
         </nav>
 
         {/* Desktop Right Section */}

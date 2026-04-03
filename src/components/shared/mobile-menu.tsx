@@ -24,43 +24,32 @@ export function MobileMenu({ session }: { session: boolean }) {
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-background absolute top-14 left-0 right-0">
           <nav className="container flex flex-col space-y-3 px-4 py-4 max-w-screen-2xl mx-auto">
-            {session ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-sm font-medium transition-colors hover:text-foreground/80"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <div className="border-t pt-2">
-                  <LogoutButton className="w-full justify-start" />
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/"
-                  className="text-sm font-medium transition-colors hover:text-foreground/80"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Home
-                </Link>
-                <Link
-                  href="#features"
-                  className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Features
-                </Link>
-                <Link
-                  href="#levels"
-                  className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Levels
-                </Link>
-                <div className="flex flex-col space-y-2 pt-2 border-t">
+            <Link
+              href="/"
+              className="text-sm font-medium transition-colors hover:text-foreground/80"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="#features"
+              className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Features
+            </Link>
+            <Link
+              href="#levels"
+              className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Levels
+            </Link>
+            <div className="border-t pt-2">
+              {session ? (
+                <LogoutButton className="w-full justify-start" />
+              ) : (
+                <div className="flex flex-col space-y-2">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="ghost" size="sm" className="w-full justify-start">
                       Log In
@@ -72,8 +61,8 @@ export function MobileMenu({ session }: { session: boolean }) {
                     </Button>
                   </Link>
                 </div>
-              </>
-            )}
+              )}
+            </div>
           </nav>
         </div>
       )}
