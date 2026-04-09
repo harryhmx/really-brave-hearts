@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,7 +41,13 @@ export default function RegisterPage() {
     if (!res.ok) {
       setError(data.details || data.error);
     } else {
-      router.push("/login");
+      await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
+      });
+      router.push("/dashboard");
+      router.refresh();
     }
   };
 
