@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,11 +32,10 @@ export default function RegisterPage() {
       body: JSON.stringify({ username, password }),
     });
 
-    setLoading(false);
-
     const data = await res.json();
 
     if (!res.ok) {
+      setLoading(false);
       setError(data.details || data.error);
     } else {
       await signIn("credentials", {
@@ -46,8 +43,7 @@ export default function RegisterPage() {
         password,
         redirect: false,
       });
-      router.push("/dashboard");
-      router.refresh();
+      window.location.href = "/dashboard";
     }
   };
 
