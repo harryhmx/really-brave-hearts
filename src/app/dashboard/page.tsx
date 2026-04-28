@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -9,20 +8,7 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id! },
-    select: {
-      username: true,
-      level: true,
-      score: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-
-  if (!user) {
-    redirect("/login");
-  }
+  const { username, level, score } = session.user;
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8">
@@ -30,26 +16,16 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         <div className="rounded-lg border p-4">
           <p className="text-sm text-muted-foreground">Username</p>
-          <p className="text-lg font-medium">{user.username}</p>
+          <p className="text-lg font-medium">{username}</p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">Level</p>
-            <p className="text-lg font-medium">{user.level}</p>
+            <p className="text-lg font-medium">{level}</p>
           </div>
           <div className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">Score</p>
-            <p className="text-lg font-medium">{user.score}</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-lg border p-4">
-            <p className="text-sm text-muted-foreground">Created At</p>
-            <p className="text-sm">{user.createdAt.toLocaleDateString()}</p>
-          </div>
-          <div className="rounded-lg border p-4">
-            <p className="text-sm text-muted-foreground">Updated At</p>
-            <p className="text-sm">{user.updatedAt.toLocaleDateString()}</p>
+            <p className="text-lg font-medium">{score}</p>
           </div>
         </div>
       </div>
