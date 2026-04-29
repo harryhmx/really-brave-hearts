@@ -47,11 +47,7 @@ export default function LoginPage() {
   };
 
   if (status === "loading" || status === "authenticated") {
-    return (
-      <div className="flex flex-1 items-center justify-center">
-        <Loader2 className="animate-spin h-8 w-8 text-muted-foreground" />
-      </div>
-    );
+    return null;
   }
 
   return (
