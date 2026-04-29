@@ -20,8 +20,8 @@ export default async function DashboardPage() {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-lg border p-4">
-            <p className="text-sm text-muted-foreground">Level</p>
-            <p className="text-lg font-medium">{level}</p>
+            <p className="text-sm text-muted-foreground">Lexile Level</p>
+            <p className="text-lg font-medium">{level ?? "Not set"}</p>
           </div>
           <div className="rounded-lg border p-4">
             <p className="text-sm text-muted-foreground">Score</p>

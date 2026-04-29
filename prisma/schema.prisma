@@ -9,18 +9,25 @@ datasource db {
   provider = "postgresql"
 }
 
-// User model - Stage 1 basic version for authentication
+// User model
 model User {
-  id        String   @id @default(cuid())
-  username  String   @unique
-  email     String?  @unique
-  password  String
-  level     Int      @default(1)
-  score     Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(cuid())
+  username          String    @unique
+  email             String?   @unique
+  password          String
+  usertype          String    @default("student")
+  level             String?
+  score             Int       @default(0)
+  phoneNumber       String?   @unique
+  age               Int?
+  selectedProjectId String?
+  selectedStoryId   String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  sessions  Session[]
+  sessions         Session[]
+  selectedProject  Project?  @relation("SelectedProject", fields: [selectedProjectId], references: [id])
+  selectedStory    Story?    @relation("SelectedStory", fields: [selectedStoryId], references: [id])
 }
 
 // NextAuth Session model
@@ -30,4 +37,31 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Project model — higher-level grouping
+model Project {
+  id        String   @id @default(cuid())
+  title     String
+  description String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stories         Story[]
+  selectedByUsers User[] @relation("SelectedProject")
+}
+
+// Story model — maps to old project's Project
+model Story {
+  id        String  @id @default(cuid())
+  title     String
+  content   String? @db.Text
+  age       Int
+  level     String
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project        Project        @relation(fields: [projectId], references: [id])
+  selectedByUsers User[]        @relation("SelectedStory")
 }

@@ -34,7 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           id: user.id,
           name: user.username,
           username: user.username,
-          level: user.level,
+          level: user.level ?? undefined,
           score: user.score,
         };
       },
@@ -60,7 +60,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user && token.id) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
-        session.user.level = token.level as number;
+        session.user.level = token.level as string;
         session.user.score = token.score as number;
       }
       return session;

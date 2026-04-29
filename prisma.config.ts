@@ -3,12 +3,18 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+const rawUrl = process.env["POSTGRES_PRISMA_URL"] ?? "";
+const cleanUrl = rawUrl
+  .replace(/:6543/, ":5432")
+  .replace(/[?&]pgbouncer=true/, "")
+  .replace("sslmode=require", "sslmode=disable");
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["POSTGRES_PRISMA_URL"],
+    url: cleanUrl,
   },
 });

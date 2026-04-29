@@ -5,14 +5,14 @@ declare module "next-auth" {
     user: {
       id: string;
       username: string;
-      level: number;
+      level: string | null;
       score: number;
     } & DefaultSession["user"];
   }
 
   interface User {
     username?: string;
-    level?: number;
+    level?: string;
     score?: number;
   }
 }
@@ -21,7 +21,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     username: string;
-    level: number;
+    level: string | undefined;
     score: number;
   }
 }
