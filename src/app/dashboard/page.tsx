@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { toDisplayName } from "@/lib/utils";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -16,7 +17,7 @@ export default async function DashboardPage() {
       <div className="space-y-4">
         <div className="rounded-lg border p-4">
           <p className="text-sm text-muted-foreground">Username</p>
-          <p className="text-lg font-medium">{username}</p>
+          <p className="text-lg font-medium">{toDisplayName(username)}</p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="rounded-lg border p-4">
