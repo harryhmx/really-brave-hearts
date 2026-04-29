@@ -9,13 +9,15 @@ import { MobileMenu } from "./mobile-menu"
 import { Button } from "@/components/ui/button"
 
 export function Header() {
-  const { data: session, status } = useSession()
+  const sessionData = useSession()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  const session = sessionData?.data
+  const status = sessionData?.status ?? "unauthenticated"
   const isLoggedIn = mounted && status === "authenticated"
   const isMobileMenuLoggedIn = mounted ? !!session?.user : false
 
