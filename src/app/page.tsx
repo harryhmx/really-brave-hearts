@@ -29,11 +29,6 @@ export default function Home() {
                 Start Learning Free
               </Button>
             </Link>
-            <Link href="/login">
-              <Button size="lg" variant="outline" className="border-[#4a148c]/20 dark:border-[#9c6ede]/30 text-[#311b92] dark:text-[#d4b8ff] hover:bg-[#311b92]/5 dark:hover:bg-[#9c6ede]/10">
-                Log In
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
