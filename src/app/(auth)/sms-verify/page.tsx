@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ export default function SmsVerifyPage() {
   const [sendLoading, setSendLoading] = useState(false);
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const router = useRouter();
 
   const verifyTimer = useLoadingTimer(verifyLoading);
 
@@ -90,6 +92,7 @@ export default function SmsVerifyPage() {
       const data = await res.json();
       if (!res.ok || !data.success) {
         setError(data.message || "Verification failed");
+        setVerifyLoading(false);
         return;
       }
 
@@ -101,12 +104,12 @@ export default function SmsVerifyPage() {
 
       if (result?.error) {
         setError("Failed to create session");
+        setVerifyLoading(false);
       } else {
-        window.location.href = "/dashboard";
+        router.push("/dashboard");
       }
     } catch {
       setError("Network error, please try again");
-    } finally {
       setVerifyLoading(false);
     }
   };
