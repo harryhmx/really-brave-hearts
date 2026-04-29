@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -22,6 +22,15 @@ const PHONE_REGEX = /^1[3-9]\d{9}$/;
 const COUNTDOWN_SECONDS = 60;
 
 export default function SmsVerifyPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [code, setCode] = useState("");
@@ -29,7 +38,6 @@ export default function SmsVerifyPage() {
   const [sendLoading, setSendLoading] = useState(false);
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  const router = useRouter();
 
   const verifyTimer = useLoadingTimer(verifyLoading);
 
