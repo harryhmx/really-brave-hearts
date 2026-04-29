@@ -24,7 +24,7 @@ export default function Home() {
             AI-powered content, and personalized progress tracking.
           </p>
           <div className="flex gap-4">
-            <Link href="/register">
+            <Link href="/sms-verify">
               <Button size="lg" className="bg-gradient-to-r from-[#ff6b95] to-[#ff8e88] text-white border-0 hover:from-[#ff527b] hover:to-[#ff7a73] shadow-lg shadow-pink-200 dark:shadow-pink-900/30">
                 Start Learning Free
               </Button>

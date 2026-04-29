@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
     request.cookies.get("__Secure-authjs.session-token");
   const isLoggedIn = !!sessionToken?.value;
 
-  const publicRoutes = ["/", "/login", "/register"];
+  const publicRoutes = ["/", "/login", "/register", "/sms-verify"];
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
 
   if (isLoggedIn && isPublicRoute && nextUrl.pathname !== "/") {

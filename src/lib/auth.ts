@@ -8,6 +8,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   providers: [
     Credentials({
+      id: "credentials",
       name: "credentials",
       credentials: {
         username: { label: "Username", type: "text" },
@@ -30,6 +31,50 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         );
 
         if (!isPasswordValid) return null;
+
+        return {
+          id: user.id,
+          name: user.username,
+          username: user.username,
+          level: user.level ?? undefined,
+          score: user.score,
+        };
+      },
+    }),
+    Credentials({
+      id: "sms",
+      name: "sms",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        phone_number: { label: "Phone Number", type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.username || !credentials?.phone_number) {
+          return null;
+        }
+
+        const dbUsername = toDbUsername(credentials.username as string);
+        const phoneNumber = credentials.phone_number as string;
+
+        const existing = await prisma.user.findUnique({
+          where: { username: dbUsername },
+        });
+
+        let user;
+        if (existing) {
+          user = await prisma.user.update({
+            where: { username: dbUsername },
+            data: { phoneNumber },
+          });
+        } else {
+          const placeholderPw = await bcrypt.hash(
+            `sms_${Date.now()}_${Math.random()}`,
+            10
+          );
+          user = await prisma.user.create({
+            data: { username: dbUsername, phoneNumber, password: placeholderPw },
+          });
+        }
 
         return {
           id: user.id,

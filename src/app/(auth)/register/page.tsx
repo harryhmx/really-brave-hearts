@@ -107,6 +107,12 @@ export default function RegisterPage() {
                 Log In
               </Link>
             </p>
+            <p className="text-sm text-center text-muted-foreground">
+              Prefer phone number?{" "}
+              <Link href="/sms-verify" className="text-primary hover:underline">
+                SMS Verify
+              </Link>
+            </p>
           </form>
         </CardContent>
       </Card>
