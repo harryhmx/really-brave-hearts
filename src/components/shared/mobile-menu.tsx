@@ -34,7 +34,7 @@ export function MobileMenu({ session }: { session: boolean }) {
             </Link>
             <div className="border-t border-[#4a148c]/10 dark:border-[#311b92]/15 w-full pt-3">
               {session ? (
-                <LogoutButton className="w-full justify-center" />
+                <LogoutButton className="w-full justify-center text-foreground dark:text-[#311b92]/70" />
               ) : (
                 <div className="flex flex-col items-center space-y-2">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
