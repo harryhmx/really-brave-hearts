@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -15,6 +16,7 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const timer = useLoadingTimer(loading);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,7 +99,7 @@ export default function RegisterPage() {
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading && <Loader2 className="animate-spin" />}
-              {loading ? "Creating account..." : "Sign Up"}
+              {loading ? `Creating account... (${timer})` : "Sign Up"}
             </Button>
             <p className="text-sm text-center text-muted-foreground">
               Already have an account?{" "}
