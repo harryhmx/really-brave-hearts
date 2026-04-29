@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Really Brave Hearts - English Learning for Kids",
   description: "A gamified English learning platform for children aged 6-12 years",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

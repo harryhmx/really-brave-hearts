@@ -9,18 +9,18 @@ export async function Header() {
   const session = await auth()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#4a148c] to-[#311b92] dark:from-[#e8daff] dark:to-[#d4b8ff]">
       <div className="container flex h-14 max-w-screen-2xl items-center mx-auto px-4">
         {/* Logo */}
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          <span className="font-bold">
+        <Link href="/" className="mr-6 flex items-center space-x-2 transition-transform hover:scale-105">
+          <span className="font-bold text-white dark:text-[#311b92] text-lg">
             RBH
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="/dashboard" className="transition-colors hover:text-foreground/80 text-foreground">
+          <Link href="/dashboard" className="text-white/80 dark:text-[#311b92]/70 transition-colors hover:text-white dark:hover:text-[#311b92]">
             Dashboard
           </Link>
         </nav>
@@ -33,10 +33,14 @@ export async function Header() {
           ) : (
             <nav className="flex items-center space-x-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm">Log In</Button>
+                <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10">
+                  Log In
+                </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm">Sign Up</Button>
+                <Button size="sm" className="bg-gradient-to-r from-[#ff8a65] to-[#ff7043] text-white dark:from-[#4a148c] dark:to-[#311b92] border-0 hover:from-[#ff7043] hover:to-[#f4511e] dark:hover:from-[#311b92] dark:hover:to-[#4a148c]">
+                  Sign Up
+                </Button>
               </Link>
             </nav>
           )}
