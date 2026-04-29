@@ -1,12 +1,23 @@
+"use client"
+
 import Link from "next/link"
-import { auth } from "@/lib/auth"
+import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import { ThemeToggle } from "./theme-toggle"
 import { LogoutButton } from "./logout-button"
 import { MobileMenu } from "./mobile-menu"
 import { Button } from "@/components/ui/button"
 
-export async function Header() {
-  const session = await auth()
+export function Header() {
+  const { data: session, status } = useSession()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isLoggedIn = mounted && status === "authenticated"
+  const isMobileMenuLoggedIn = mounted ? !!session?.user : false
 
   return (
     <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#4a148c] to-[#311b92] dark:from-[#e8daff] dark:to-[#d4b8ff]">
@@ -20,16 +31,18 @@ export async function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="/dashboard" className="text-white/80 dark:text-[#311b92]/70 transition-colors hover:text-white dark:hover:text-[#311b92]">
-            Dashboard
-          </Link>
+          {isLoggedIn && (
+            <Link href="/dashboard" className="text-white/80 dark:text-[#311b92]/70 transition-colors hover:text-white dark:hover:text-[#311b92]">
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         {/* Desktop Right Section */}
         <div className="hidden md:flex ml-auto items-center space-x-4">
           <ThemeToggle />
-          {!!session?.user ? (
-            <LogoutButton />
+          {isLoggedIn ? (
+            <LogoutButton className="text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10" />
           ) : (
             <nav className="flex items-center space-x-2">
               <Link href="/login">
@@ -47,7 +60,7 @@ export async function Header() {
         </div>
 
         {/* Mobile Menu */}
-        <MobileMenu session={!!session?.user} />
+        <MobileMenu session={isMobileMenuLoggedIn} />
       </div>
     </header>
   )

@@ -14,7 +14,7 @@ export function LogoutButton({ className }: { className?: string }) {
     <Button
       variant="ghost"
       size="sm"
-      className={`${className || ""} text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10`}
+      className={className}
       disabled={loading}
       onClick={() => {
         setLoading(true);
