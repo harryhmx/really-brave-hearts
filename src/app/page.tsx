@@ -39,7 +39,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="bg-[#fff5f7] dark:bg-[#120520] py-24">
+      <section id="features" className="bg-[#fff5f7] dark:bg-[#1e0a38] py-24">
         <div className="container px-4 mx-auto max-w-screen-2xl">
           <h2 className="text-3xl font-bold text-center mb-12 text-[#311b92] dark:text-[#d4b8ff]">
             Why Kids Love Learning With Us
