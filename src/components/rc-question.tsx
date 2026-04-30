@@ -120,10 +120,10 @@ export default function RCQuestion({
                 <span className="font-medium text-[#4a148c] dark:text-[#c4a8e8]">
                   {c.label}
                 </span>
-                {result && isCorrectAnswer && (
+                {result && result.correct && isCorrectAnswer && (
                   <CheckCircle2 className="inline-block ml-2 h-4 w-4 text-green-500" />
                 )}
-                {result && isSelected && !result.correct && !isCorrectAnswer && (
+                {result && !result.correct && isSelected && (
                   <XCircle className="inline-block ml-2 h-4 w-4 text-red-500" />
                 )}
               </button>
