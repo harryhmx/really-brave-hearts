@@ -38,6 +38,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           username: user.username,
           level: user.level ?? undefined,
           score: user.score,
+          usertype: user.usertype,
         };
       },
     }),
@@ -82,6 +83,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           username: user.username,
           level: user.level ?? undefined,
           score: user.score,
+          usertype: user.usertype,
         };
       },
     }),
@@ -99,6 +101,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.username = user.username;
         token.level = user.level;
         token.score = user.score;
+        token.usertype = user.usertype;
       }
       return token;
     },
@@ -108,6 +111,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         session.user.username = token.username as string;
         session.user.level = token.level as string;
         session.user.score = token.score as number;
+        session.user.usertype = token.usertype as string;
       }
       return session;
     },
