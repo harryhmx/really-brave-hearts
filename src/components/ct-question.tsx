@@ -64,7 +64,7 @@ export default function CTQuestion({
   if (success) {
     return (
       <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-        <div className="flex items-center justify-center gap-2 text-[#ff6b95] dark:text-[#ff9fbd] font-medium animate-pulse">
+        <div className="flex items-center justify-center gap-2 text-[#7c3aed] dark:text-[#a78bfa] font-medium animate-pulse">
           <Sparkles className="h-6 w-6" />
           Great choice! Loading your next adventure...
         </div>

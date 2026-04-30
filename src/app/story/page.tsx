@@ -50,7 +50,7 @@ export default async function StoryPage() {
           className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff] mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
+          Back to Dashboard to Restart Story
         </Link>
 
       {user.storyPhase === 0 && (
