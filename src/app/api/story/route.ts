@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { projectId } = body;
+    const { projectId, requireStoryId, requireChoice, depth, parentStoryTitle } = body;
     if (!projectId) {
       return NextResponse.json({ error: "projectId is required" }, { status: 400 });
     }
@@ -37,6 +37,8 @@ export async function POST(request: Request) {
         projectId: project.id,
         age: user.age,
         level: user.level,
+        ...(requireStoryId && { requireStoryId }),
+        ...(requireChoice && { requireChoice }),
       },
     });
 
@@ -53,6 +55,10 @@ export async function POST(request: Request) {
           user_age: user.age,
           user_level: user.level,
           project_id: project.id,
+          require_story_id: requireStoryId ?? null,
+          require_choice: requireChoice ?? null,
+          depth: depth ?? 0,
+          parent_story_title: parentStoryTitle ?? null,
         }),
       });
 
@@ -78,6 +84,7 @@ export async function POST(request: Request) {
       data: {
         selectedProjectId: project.id,
         selectedStoryId: story.id,
+        storyPhase: 0,
       },
     });
 
