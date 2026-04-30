@@ -20,12 +20,16 @@ export default function ProjectCard({
   const handleStart = async () => {
     setLoading(true);
     try {
-      await fetch("/api/profile", {
-        method: "PATCH",
+      const res = await fetch("/api/story", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ selectedProjectId: projectId }),
+        body: JSON.stringify({ projectId }),
       });
-      router.refresh();
+      if (!res.ok) {
+        setLoading(false);
+        return;
+      }
+      router.push("/story");
     } catch {
       setLoading(false);
     }
@@ -56,8 +60,14 @@ export default function ProjectCard({
             disabled={loading}
           >
             {loading && <Loader2 className="animate-spin" />}
-            {loading ? "Loading..." : "Start Learning"}
+            {loading ? "Generating your story..." : "Start Story"}
           </Button>
+
+          {loading && (
+            <p className="text-xs text-muted-foreground mt-2 text-center animate-pulse">
+              Creating a story just for you...
+            </p>
+          )}
         </div>
       </div>
     </div>
