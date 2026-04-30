@@ -60,6 +60,17 @@ export async function POST(request: Request) {
           correct: true,
           score: updated.score,
           rcAnswer: story.rcAnswer,
+          advanceToCT: true,
+        });
+      }
+
+      const currentRetries = body.retries ?? 0;
+      const forceAdvance = currentRetries + 1 >= 3;
+
+      if (forceAdvance) {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { storyPhase: 2 },
         });
       }
 
@@ -67,6 +78,7 @@ export async function POST(request: Request) {
         correct: false,
         score: user.score,
         rcAnswer: story.rcAnswer,
+        advanceToCT: forceAdvance,
       });
     }
 

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, XCircle, Loader2, RotateCcw } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseQuestion, type ParsedQuestion } from "@/lib/question";
 import { renderMarkdown } from "@/lib/markdown";
-import { useMemo } from "react";
+import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
 const MAX_RETRIES = 3;
 
@@ -25,6 +25,9 @@ export default function RCQuestion({
     score?: number;
   } | null>(null);
   const [retries, setRetries] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
+  const countdown = useLoadingTimer(transitioning, 5);
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const parsed: ParsedQuestion | null = useMemo(
     () => parseQuestion(rcQuestion),
@@ -39,6 +42,11 @@ export default function RCQuestion({
     );
   }
 
+  const advanceToCT = () => {
+    setTransitioning(true);
+    setTimeout(() => router.refresh(), 1500);
+  };
+
   const handleSubmit = async () => {
     if (!selected || loading) return;
     setLoading(true);
@@ -46,33 +54,49 @@ export default function RCQuestion({
       const res = await fetch("/api/story/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "rc", answer: selected }),
+        body: JSON.stringify({ type: "rc", answer: selected, retries }),
       });
       const data = await res.json();
       setResult({ correct: data.correct, score: data.score });
 
       if (data.correct) {
-        setTimeout(() => router.refresh(), 1500);
+        advanceToCT();
       } else {
-        setRetries((prev) => prev + 1);
-        if (retries + 1 >= MAX_RETRIES) {
-          setTimeout(() => router.refresh(), 1500);
+        const newRetries = retries + 1;
+        setRetries(newRetries);
+
+        if (newRetries >= MAX_RETRIES || data.advanceToCT) {
+          advanceToCT();
+        } else {
+          retryTimerRef.current = setTimeout(() => {
+            setSelected(null);
+            setResult(null);
+          }, 1000);
         }
       }
     } catch {
       setResult({ correct: false });
+      retryTimerRef.current = setTimeout(() => {
+        setSelected(null);
+        setResult(null);
+      }, 1000);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRetry = () => {
-    setSelected(null);
-    setResult(null);
-  };
-
-  const showRetry = result && !result.correct && retries < MAX_RETRIES;
-  const showForceAdvance = result && !result.correct && retries >= MAX_RETRIES;
+  if (transitioning) {
+    return (
+      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
+        <div className="flex items-center justify-center gap-2 text-[#7c3aed] dark:text-[#a78bfa] font-medium animate-pulse">
+          <Sparkles className="h-6 w-6" />
+          {result?.correct
+            ? `Correct! +10 points — loading next question (${countdown})`
+            : `Don't worry, keep practicing! — loading next question (${countdown})`}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
@@ -143,43 +167,21 @@ export default function RCQuestion({
           </div>
         )}
 
-        {showRetry && (
+        {result && !result.correct && retries < MAX_RETRIES && !transitioning && (
           <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
             <XCircle className="h-5 w-5" />
             Not quite! Try again.
           </div>
         )}
 
-        {showForceAdvance && (
-          <div className="text-muted-foreground">
-            <p className="mb-2">Don't worry, keep practicing!</p>
-            <Button variant="outline" onClick={() => router.refresh()} className="w-full">
-              Continue
-            </Button>
-          </div>
-        )}
-
-        {!result && (
-          <Button
-            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
-            onClick={handleSubmit}
-            disabled={!selected || loading}
-          >
-            {loading && <Loader2 className="animate-spin" />}
-            {loading ? "Checking..." : "Submit Answer"}
-          </Button>
-        )}
-
-        {showRetry && (
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleRetry}
-          >
-            <RotateCcw className="h-4 w-4 mr-1" />
-            Try Again
-          </Button>
-        )}
+        <Button
+          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          onClick={handleSubmit}
+          disabled={!selected || loading || !!result}
+        >
+          {loading && <Loader2 className="animate-spin" />}
+          {loading ? "Checking..." : "Submit Answer"}
+        </Button>
       </div>
     </div>
   );
