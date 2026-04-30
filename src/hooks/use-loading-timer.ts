@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 
-export function useLoadingTimer(loading: boolean) {
-  const [timer, setTimer] = useState(10);
+export function useLoadingTimer(loading: boolean, duration = 10) {
+  const [timer, setTimer] = useState(duration);
 
   useEffect(() => {
     if (!loading) {
-      setTimer(10);
+      setTimer(duration);
       return;
     }
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
 export default function ProjectCard({
   projectId,
@@ -16,6 +17,7 @@ export default function ProjectCard({
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const countdown = useLoadingTimer(loading, 30);
 
   const handleStart = async () => {
     setLoading(true);
@@ -60,7 +62,7 @@ export default function ProjectCard({
             disabled={loading}
           >
             {loading && <Loader2 className="animate-spin" />}
-            {loading ? "Generating your story..." : "Start Story"}
+            {loading ? `Generating your story... (${countdown})` : "Start Story"}
           </Button>
 
           {loading && (
