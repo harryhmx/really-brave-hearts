@@ -11,16 +11,17 @@ export interface ParsedQuestion {
 export function parseQuestion(content: string | null | undefined): ParsedQuestion | null {
   if (!content) return null;
 
-  let questionText: string;
-  let choicesText: string;
+  // Normalize line endings: \r\n → \n
+  const normalized = content.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-  if (content.includes("\n\n...\n\n")) {
-    const parts = content.split("\n\n...\n\n");
-    questionText = parts[0].trim();
-    choicesText = parts.slice(1).join("\n");
-  } else {
+  const separator = "\n\n...\n\n";
+  if (!normalized.includes(separator)) {
     return null;
   }
+
+  const parts = normalized.split(separator);
+  const questionText = parts[0].trim();
+  const choicesText = parts.slice(1).join("\n");
 
   const choices: Choice[] = choicesText
     .split("\n")
