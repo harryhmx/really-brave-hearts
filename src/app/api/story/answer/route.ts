@@ -32,6 +32,10 @@ export async function POST(request: Request) {
 
     const story = await prisma.story.findUnique({
       where: { id: user.selectedStoryId },
+      select: {
+        id: true, title: true, rcAnswer: true, ctQuestion: true,
+        depth: true, projectId: true,
+      },
     });
 
     if (!story) {

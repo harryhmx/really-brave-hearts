@@ -15,7 +15,8 @@ export default function CTQuestion({
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const parsed: ParsedQuestion | null = useMemo(
     () => parseQuestion(ctQuestion),
@@ -33,26 +34,41 @@ export default function CTQuestion({
   const handleSubmit = async () => {
     if (!selected || loading) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/story/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "ct", choice: selected }),
       });
-      const data = await res.json();
 
-      if (data.story) {
-        setFeedback(true);
-        setTimeout(() => {
-          router.refresh();
-        }, 2000);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || `Request failed (${res.status})`);
+        setLoading(false);
+        return;
       }
+
+      setSuccess(true);
+      setTimeout(() => {
+        router.refresh();
+      }, 1500);
     } catch {
-      setLoading(false);
-    } finally {
+      setError("Network error, please try again");
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
+        <div className="flex items-center justify-center gap-2 text-[#ff6b95] dark:text-[#ff9fbd] font-medium animate-pulse">
+          <Sparkles className="h-6 w-6" />
+          Great choice! Loading your next adventure...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
@@ -79,9 +95,9 @@ export default function CTQuestion({
               <button
                 key={c.value}
                 onClick={() => {
-                  if (!feedback) setSelected(c.value);
+                  if (!loading) setSelected(c.value);
                 }}
-                disabled={feedback}
+                disabled={loading}
                 className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass}`}
               >
                 <span className="font-medium text-[#4a148c] dark:text-[#c4a8e8]">
@@ -92,23 +108,18 @@ export default function CTQuestion({
           })}
         </div>
 
-        {feedback && (
-          <div className="flex items-center justify-center gap-2 text-[#ff6b95] dark:text-[#ff9fbd] font-medium animate-pulse">
-            <Sparkles className="h-5 w-5" />
-            Great choice! Loading your next adventure...
-          </div>
+        {error && (
+          <p className="text-sm text-red-500 text-center">{error}</p>
         )}
 
-        {!feedback && (
-          <Button
-            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
-            onClick={handleSubmit}
-            disabled={!selected || loading}
-          >
-            {loading && <Loader2 className="animate-spin" />}
-            {loading ? "Loading next chapter..." : "Choose Your Path"}
-          </Button>
-        )}
+        <Button
+          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          onClick={handleSubmit}
+          disabled={!selected || loading}
+        >
+          {loading && <Loader2 className="animate-spin" />}
+          {loading ? "Generating next chapter..." : "Choose Your Path"}
+        </Button>
       </div>
     </div>
   );
