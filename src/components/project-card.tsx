@@ -2,15 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 export default function ProjectCard({
   projectId,
@@ -39,19 +32,34 @@ export default function ProjectCard({
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl">{title}</CardTitle>
-        {description && (
-          <CardDescription>{description}</CardDescription>
-        )}
-      </CardHeader>
-      <CardContent>
-        <Button className="w-full" onClick={handleStart} disabled={loading}>
-          {loading && <Loader2 className="animate-spin" />}
-          {loading ? "Loading..." : "Start"}
-        </Button>
-      </CardContent>
-    </Card>
+    <div className="w-full max-w-lg mx-auto animate-fade-in-up">
+      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+        <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+              <BookOpen className="h-5 w-5 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white">{title}</h3>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {description && (
+            <p className="text-[#4a148c]/70 dark:text-[#c4a8e8]/60 mb-6 leading-relaxed">
+              {description}
+            </p>
+          )}
+
+          <Button
+            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+            onClick={handleStart}
+            disabled={loading}
+          >
+            {loading && <Loader2 className="animate-spin" />}
+            {loading ? "Loading..." : "Start Learning"}
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -2,15 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -57,20 +50,31 @@ export default function ProfileForm() {
   };
 
   return (
-    <Card className="w-full max-w-sm mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome!</CardTitle>
-        <CardDescription>
-          Tell us about yourself to get started
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full max-w-md mx-auto animate-fade-in-up">
+      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ff6b95] to-[#a855f7] flex items-center justify-center mb-4 shadow-md">
+            <UserCircle className="h-8 w-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-[#311b92] dark:text-[#d4b8ff]">
+            Welcome!
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Tell us about yourself to get started
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <p className="text-sm text-red-500 text-center">{error}</p>
+            <div className="rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 p-3">
+              <p className="text-sm text-red-600 dark:text-red-400 text-center">{error}</p>
+            </div>
           )}
+
           <div className="space-y-2">
-            <Label htmlFor="age">Age</Label>
+            <Label htmlFor="age" className="text-[#4a148c] dark:text-[#c4a8e8]">
+              Age
+            </Label>
             <Input
               id="age"
               type="number"
@@ -80,10 +84,14 @@ export default function ProfileForm() {
               value={age}
               onChange={(e) => setAge(e.target.value)}
               required
+              className="h-11"
             />
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="level">Lexile Level</Label>
+            <Label htmlFor="level" className="text-[#4a148c] dark:text-[#c4a8e8]">
+              Lexile Level
+            </Label>
             <Input
               id="level"
               type="text"
@@ -91,14 +99,20 @@ export default function ProfileForm() {
               value={level}
               onChange={(e) => setLevel(e.target.value)}
               required
+              className="h-11"
             />
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
+
+          <Button
+            type="submit"
+            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+            disabled={loading}
+          >
             {loading && <Loader2 className="animate-spin" />}
             {loading ? "Saving..." : "Continue"}
           </Button>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
