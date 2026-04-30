@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
-import { RBH_SKILLS_URL } from "@/lib/config";
 
 const PHONE_REGEX = /^1[3-9]\d{9}$/;
 const COUNTDOWN_SECONDS = 60;
@@ -55,7 +54,7 @@ export default function SmsVerifyPage() {
     }
     setSendLoading(true);
     try {
-      const res = await fetch(`${RBH_SKILLS_URL}/api/auth/sms/send`, {
+      const res = await fetch("/api/sms/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone_number: phone }),
@@ -92,7 +91,7 @@ export default function SmsVerifyPage() {
 
     setVerifyLoading(true);
     try {
-      const res = await fetch(`${RBH_SKILLS_URL}/api/auth/sms/verify`, {
+      const res = await fetch("/api/sms/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone_number: phone, verify_code: code }),

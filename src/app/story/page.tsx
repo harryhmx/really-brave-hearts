@@ -26,6 +26,11 @@ export default async function StoryPage() {
 
   const story = await prisma.story.findUnique({
     where: { id: user.selectedStoryId },
+    select: {
+      id: true, title: true, content: true,
+      imageUrl: true, audioUrl: true,
+      rcQuestion: true, rcAnswer: true, ctQuestion: true,
+    },
   });
 
   if (!story) redirect("/dashboard");

@@ -14,6 +14,11 @@ export default async function DashboardPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
+    select: {
+      id: true, username: true, usertype: true,
+      age: true, level: true, score: true,
+      selectedStoryId: true, selectedProjectId: true, storyPhase: true,
+    },
   });
 
   if (!user) {
@@ -24,6 +29,7 @@ export default async function DashboardPage() {
     const students = await prisma.user.findMany({
       where: { usertype: "student" },
       orderBy: { createdAt: "desc" },
+      select: { id: true, username: true, age: true, level: true, score: true },
     });
 
     return (
