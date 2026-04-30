@@ -29,8 +29,6 @@ export default async function StoryPage() {
 
   if (!story) redirect("/dashboard");
 
-  const projectId = user.selectedProjectId ?? story.projectId;
-
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
       <Link

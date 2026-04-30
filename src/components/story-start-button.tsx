@@ -8,29 +8,43 @@ import { Button } from "@/components/ui/button";
 export default function StoryStartButton() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleStart = async () => {
     setLoading(true);
+    setError(null);
     try {
-      await fetch("/api/story/phase", {
+      const res = await fetch("/api/story/phase", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phase: 1 }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "Unknown error" }));
+        setError(data.error || `HTTP ${res.status}`);
+        setLoading(false);
+        return;
+      }
       router.refresh();
-    } catch {
+    } catch (err) {
+      setError("Network error");
       setLoading(false);
     }
   };
 
   return (
-    <Button
-      className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
-      onClick={handleStart}
-      disabled={loading}
-    >
-      {loading && <Loader2 className="animate-spin" />}
-      {loading ? "Loading..." : "Answer Questions"}
-    </Button>
+    <div className="space-y-2">
+      <Button
+        className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+        onClick={handleStart}
+        disabled={loading}
+      >
+        {loading && <Loader2 className="animate-spin" />}
+        {loading ? "Loading..." : "Answer Questions"}
+      </Button>
+      {error && (
+        <p className="text-sm text-red-500 text-center">{error}</p>
+      )}
+    </div>
   );
 }
