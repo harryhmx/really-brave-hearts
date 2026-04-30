@@ -91,13 +91,21 @@ export default function RCQuestion({
             const isCorrectAnswer = c.value.toLowerCase() === rcAnswer?.toLowerCase();
             let borderClass =
               "border-pink-100 dark:border-pink-900/30 hover:border-[#a855f7]/50";
+            let bgClass = "";
 
-            if (result) {
+            if (result && result.correct) {
               if (isCorrectAnswer) {
-                borderClass = "border-green-400 dark:border-green-500 bg-green-50 dark:bg-green-900/20";
-              } else if (isSelected && !result.correct) {
-                borderClass = "border-red-400 dark:border-red-500 bg-red-50 dark:bg-red-900/20";
+                borderClass = "border-green-400 dark:border-green-500";
+                bgClass = "bg-green-50 dark:bg-green-900/20";
               }
+            } else if (result && !result.correct) {
+              if (isSelected) {
+                borderClass = "border-red-400 dark:border-red-500";
+                bgClass = "bg-red-50 dark:bg-red-900/20";
+              }
+            } else if (isSelected) {
+              borderClass = "border-[#a855f7] ring-2 ring-[#a855f7]/30";
+              bgClass = "bg-purple-50 dark:bg-purple-900/20";
             }
 
             return (
@@ -107,7 +115,7 @@ export default function RCQuestion({
                   if (!result) setSelected(c.value);
                 }}
                 disabled={!!result}
-                className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass} ${isSelected && !result ? "border-[#a855f7] bg-purple-50 dark:bg-purple-900/20" : ""}`}
+                className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass} ${bgClass}`}
               >
                 <span className="font-medium text-[#4a148c] dark:text-[#c4a8e8]">
                   {c.label}
@@ -138,13 +146,13 @@ export default function RCQuestion({
         {showRetry && (
           <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400">
             <XCircle className="h-5 w-5" />
-            Not quite! Try again. ({retries}/{MAX_RETRIES})
+            Not quite! Try again.
           </div>
         )}
 
         {showForceAdvance && (
           <div className="text-muted-foreground">
-            <p className="mb-2">The correct answer was <strong>{rcAnswer?.toUpperCase()}</strong>.</p>
+            <p className="mb-2">Don't worry, keep practicing!</p>
             <Button variant="outline" onClick={() => router.refresh()} className="w-full">
               Continue
             </Button>

@@ -6,7 +6,7 @@ import RCQuestion from "@/components/rc-question";
 import CTQuestion from "@/components/ct-question";
 import StoryStartButton from "@/components/story-start-button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 
 export default async function StoryPage() {
   const session = await auth();
@@ -18,6 +18,7 @@ export default async function StoryPage() {
       selectedStoryId: true,
       selectedProjectId: true,
       storyPhase: true,
+      score: true,
     },
   });
 
@@ -31,13 +32,19 @@ export default async function StoryPage() {
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
-      <Link
-        href="/dashboard"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff] mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
-      </Link>
+      <div className="flex items-center justify-between mb-6">
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff]"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Link>
+        <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[#ffd700] to-[#ffa500] px-4 py-1.5 shadow-md shadow-orange-200/50 dark:shadow-orange-900/30">
+          <Star className="h-4 w-4 text-white" />
+          <span className="font-bold text-white text-sm">{user.score}</span>
+        </div>
+      </div>
 
       {user.storyPhase === 0 && (
         <div className="space-y-4">
