@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     const story = await prisma.story.findUnique({
       where: { id: user.selectedStoryId },
       select: {
-        id: true, title: true, rcAnswer: true, ctQuestion: true,
+        id: true, title: true, content: true, rcAnswer: true, ctQuestion: true,
         depth: true, projectId: true,
       },
     });
@@ -116,6 +116,7 @@ export async function POST(request: Request) {
             require_choice: choice,
             depth: story.depth + 1,
             parent_story_title: story.title,
+            parent_story_content: story.content,
           }),
         });
 
