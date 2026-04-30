@@ -17,7 +17,7 @@ export default function ProjectCard({
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const countdown = useLoadingTimer(loading, 30);
+  const countdown = useLoadingTimer(loading, 60);
 
   const handleStart = async () => {
     setLoading(true);
@@ -67,7 +67,7 @@ export default function ProjectCard({
 
           {loading && (
             <p className="text-xs text-muted-foreground mt-2 text-center animate-pulse">
-              Creating a story just for you...
+              Generating a unique story with illustration and audio — this may take a moment
             </p>
           )}
         </div>
