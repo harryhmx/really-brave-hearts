@@ -31,19 +31,20 @@ export default async function StoryPage() {
   if (!story) redirect("/dashboard");
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
-      <Link
-        href="/dashboard"
-        className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff] mb-6"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
-      </Link>
-
+    <>
       <div className="fixed top-20 right-6 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#ffd700] to-[#ffa500] px-4 py-2 shadow-lg shadow-orange-200/50 dark:shadow-orange-900/30 hover:scale-105 transition-transform cursor-default">
         <Star className="h-5 w-5 text-white" />
         <span className="font-bold text-white">{user.score}</span>
       </div>
+
+      <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
+        <Link
+          href="/dashboard"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff] mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Link>
 
       {user.storyPhase === 0 && (
         <div className="space-y-4">
@@ -69,6 +70,7 @@ export default async function StoryPage() {
           ctQuestion={story.ctQuestion}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }
