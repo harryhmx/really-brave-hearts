@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLoadingTimer } from "@/hooks/use-loading-timer";
 import { parseQuestion, type ParsedQuestion } from "@/lib/question";
 import { renderMarkdown } from "@/lib/markdown";
 
@@ -15,6 +16,7 @@ export default function CTQuestion({
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const countdown = useLoadingTimer(loading, 60);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,8 +120,14 @@ export default function CTQuestion({
           disabled={!selected || loading}
         >
           {loading && <Loader2 className="animate-spin" />}
-          {loading ? "Generating next chapter..." : "Choose Your Path"}
+          {loading ? `Generating next chapter... (${countdown})` : "Choose Your Path"}
         </Button>
+
+        {loading && (
+          <p className="text-xs text-muted-foreground mt-2 text-center animate-pulse">
+            Creating your next adventure with illustration and audio — this may take a moment
+          </p>
+        )}
       </div>
     </div>
   );
