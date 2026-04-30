@@ -1,9 +1,7 @@
 "use client";
 
-import { useRef, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { renderMarkdown } from "@/lib/markdown";
-
-const VOLUME_GAIN = 2.0;
 
 export default function StoryContent({
   title,
@@ -17,24 +15,6 @@ export default function StoryContent({
   audioUrl?: string | null;
 }) {
   const html = useMemo(() => (content ? renderMarkdown(content) : ""), [content]);
-  const audioRef = useRef<HTMLAudioElement>(null);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio || !audioUrl) return;
-
-    const ctx = new AudioContext();
-    const source = ctx.createMediaElementSource(audio);
-    const gain = ctx.createGain();
-    gain.gain.value = VOLUME_GAIN;
-    source.connect(gain);
-    gain.connect(ctx.destination);
-
-    return () => {
-      source.disconnect();
-      ctx.close();
-    };
-  }, [audioUrl]);
 
   return (
     <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
@@ -54,7 +34,7 @@ export default function StoryContent({
 
         {audioUrl && (
           <div className="rounded-xl bg-pink-50 dark:bg-pink-900/10 p-4">
-            <audio controls className="w-full" ref={audioRef}>
+            <audio controls className="w-full" autoPlay>
               <source src={audioUrl} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>

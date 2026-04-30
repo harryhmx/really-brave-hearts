@@ -31,7 +31,7 @@ export default function ProjectCard({
         setLoading(false);
         return;
       }
-      router.push("/story");
+      window.location.href = "/story";
     } catch {
       setLoading(false);
     }
