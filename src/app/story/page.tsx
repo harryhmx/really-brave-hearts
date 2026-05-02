@@ -3,10 +3,9 @@ export const dynamic = "force-dynamic";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import StoryContent from "@/components/story-content";
+import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
 import CTQuestion from "@/components/ct-question";
-import StoryStartButton from "@/components/story-start-button";
 import Link from "next/link";
 import { ArrowLeft, Star } from "lucide-react";
 
@@ -54,15 +53,13 @@ export default async function StoryPage() {
         </Link>
 
       {user.storyPhase === 0 && (
-        <div className="space-y-4">
-          <StoryContent
-            title={story.title}
-            content={story.content}
-            imageUrl={story.imageUrl}
-            audioUrl={story.audioUrl}
-          />
-          <StoryStartButton />
-        </div>
+        <StoryPhase0
+          title={story.title}
+          content={story.content}
+          imageUrl={story.imageUrl}
+          audioUrl={story.audioUrl}
+          storyId={story.id}
+        />
       )}
 
       {user.storyPhase === 1 && (

@@ -111,6 +111,8 @@ export async function POST(request: Request) {
         },
       });
 
+      let mediaReady = !!nextStory?.imageUrl && !!nextStory?.audioUrl;
+
       if (!nextStory) {
         const skillsRes = await fetch(`${RBH_SKILLS_URL}/api/story/generate`, {
           method: "POST",
@@ -143,6 +145,7 @@ export async function POST(request: Request) {
 
         const skillsData = await skillsRes.json();
         nextStory = skillsData.story;
+        mediaReady = skillsData.mediaReady ?? false;
       }
 
       if (!nextStory) {
@@ -160,7 +163,7 @@ export async function POST(request: Request) {
         },
       });
 
-      return NextResponse.json({ story: nextStory });
+      return NextResponse.json({ story: nextStory, mediaReady });
     }
 
     return NextResponse.json({ error: "Invalid type" }, { status: 400 });

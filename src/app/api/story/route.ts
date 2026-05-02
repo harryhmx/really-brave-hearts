@@ -42,6 +42,8 @@ export async function POST(request: Request) {
       },
     });
 
+    let mediaReady = !!story?.imageUrl && !!story?.audioUrl;
+
     if (!story) {
       const skillsRes = await fetch(`${RBH_SKILLS_URL}/api/story/generate`, {
         method: "POST",
@@ -73,6 +75,7 @@ export async function POST(request: Request) {
 
       const skillsData = await skillsRes.json();
       story = skillsData.story;
+      mediaReady = skillsData.mediaReady ?? false;
     }
 
     if (!story) {
@@ -88,7 +91,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json({ story });
+    return NextResponse.json({ story, mediaReady });
   } catch (error) {
     console.error("Story load error:", error);
     return NextResponse.json(
