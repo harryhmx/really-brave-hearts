@@ -61,6 +61,7 @@ export async function POST(request: Request) {
           require_choice: requireChoice ?? null,
           depth: depth ?? 0,
           parent_story_title: parentStoryTitle ?? null,
+          fresh_story: true,
         }),
       });
 
