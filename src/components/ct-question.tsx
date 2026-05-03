@@ -87,7 +87,6 @@ export default function CTQuestion({
         <div className="space-y-2">
           {parsed.choices.map((c) => {
             const isSelected = selected === c.value;
-            const isCorrectAnswer = c.value.toLowerCase() === rcAnswer?.toLowerCase();
             let borderClass =
               "border-pink-100 dark:border-pink-900/30 hover:border-[#ff6b95]/50";
 
