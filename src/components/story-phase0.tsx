@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import StoryContent from "@/components/story-content";
 import StoryStartButton from "@/components/story-start-button";
 
@@ -18,13 +17,11 @@ export default function StoryPhase0({
   audioUrl?: string | null;
   storyId: string;
 }) {
-  const router = useRouter();
   const [mediaReady, setMediaReady] = useState(!!imageUrl && !!audioUrl);
 
   const handleMediaReady = useCallback(() => {
     setMediaReady(true);
-    router.refresh();
-  }, [router]);
+  }, []);
 
   return (
     <div className="space-y-4">

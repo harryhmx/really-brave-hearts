@@ -72,7 +72,14 @@ export default function CTQuestion({
   };
 
   if (stageCompleted) {
-    return null;
+    return (
+      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
+        <div className="flex items-center justify-center gap-2 text-[#ffd700] dark:text-[#ffcc00] font-medium animate-pulse">
+          <Loader2 className="animate-spin h-6 w-6" />
+          Story Completed! Loading...
+        </div>
+      </div>
+    );
   }
 
   if (success) {

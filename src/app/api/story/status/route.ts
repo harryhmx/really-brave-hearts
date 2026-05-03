@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { RBH_SKILLS_URL } from "@/lib/config";
 
 export async function GET(request: Request) {
@@ -24,7 +25,22 @@ export async function GET(request: Request) {
       return NextResponse.json({ imageReady: false, audioReady: false });
     }
 
-    return NextResponse.json(await res.json());
+    const data = await res.json();
+
+    if (data.imageReady || data.audioReady) {
+      const story = await prisma.story.findUnique({
+        where: { id: storyId },
+        select: { imageUrl: true, audioUrl: true },
+      });
+      return NextResponse.json({
+        imageReady: !!story?.imageUrl,
+        audioReady: !!story?.audioUrl,
+        imageUrl: story?.imageUrl ?? null,
+        audioUrl: story?.audioUrl ?? null,
+      });
+    }
+
+    return NextResponse.json(data);
   } catch {
     return NextResponse.json({ imageReady: false, audioReady: false });
   }

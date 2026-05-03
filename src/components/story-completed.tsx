@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, ArrowRight, Loader2 } from "lucide-react";
+import { Trophy, ArrowRight, RotateCcw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
@@ -16,24 +16,36 @@ export default function StoryCompleted({
   score: number;
 }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const countdown = useLoadingTimer(loading, 60);
+  const [nextLoading, setNextLoading] = useState(false);
+  const [restartLoading, setRestartLoading] = useState(false);
+  const nextCountdown = useLoadingTimer(nextLoading, 60);
+  const restartCountdown = useLoadingTimer(restartLoading, 60);
+
+  const handleRestart = async () => {
+    setRestartLoading(true);
+    try {
+      await fetch("/api/story/reset", { method: "POST" });
+      window.location.href = "/dashboard";
+    } catch {
+      setRestartLoading(false);
+    }
+  };
 
   const handleNextStory = async () => {
-    setLoading(true);
+    setNextLoading(true);
     try {
       const res = await fetch("/api/story", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId }),
+        body: JSON.stringify({ projectId, freshStory: true }),
       });
       if (!res.ok) {
-        setLoading(false);
+        setNextLoading(false);
         return;
       }
       window.location.href = "/story";
     } catch {
-      setLoading(false);
+      setNextLoading(false);
     }
   };
 
@@ -65,10 +77,20 @@ export default function StoryCompleted({
         <Button
           className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
           onClick={handleNextStory}
-          disabled={loading}
+          disabled={nextLoading || restartLoading}
         >
-          {loading ? <Loader2 className="animate-spin" /> : <ArrowRight className="h-4 w-4 mr-1" />}
-          {loading ? `Generating next story... (${countdown})` : "Next Story"}
+          {nextLoading ? <Loader2 className="animate-spin" /> : <ArrowRight className="h-4 w-4 mr-1" />}
+          {nextLoading ? `Generating next story... (${nextCountdown})` : "Next Story"}
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full h-11 rounded-xl"
+          onClick={handleRestart}
+          disabled={nextLoading || restartLoading}
+        >
+          {restartLoading ? <Loader2 className="animate-spin" /> : <RotateCcw className="h-4 w-4 mr-1" />}
+          {restartLoading ? `Resetting... (${restartCountdown})` : "Restart Story"}
         </Button>
       </div>
     </div>

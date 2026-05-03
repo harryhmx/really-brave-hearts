@@ -7,8 +7,7 @@ import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
 import CTQuestion from "@/components/ct-question";
 import StoryCompleted from "@/components/story-completed";
-import Link from "next/link";
-import { ArrowLeft, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
 export default async function StoryPage() {
   const session = await auth();
@@ -46,14 +45,6 @@ export default async function StoryPage() {
       </div>
 
       <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#311b92] dark:hover:text-[#d4b8ff] mb-6"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard to Restart Story
-        </Link>
-
       {user.storyPhase === 0 && (
         <StoryPhase0
           title={story.title}
