@@ -8,7 +8,7 @@ import { parseQuestion, type ParsedQuestion } from "@/lib/question";
 import { renderMarkdown } from "@/lib/markdown";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 2;
 
 export default function RCQuestion({
   rcQuestion,

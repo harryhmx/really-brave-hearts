@@ -65,7 +65,7 @@ export async function POST(request: Request) {
       }
 
       const currentRetries = body.retries ?? 0;
-      const forceAdvance = currentRetries + 1 >= 3;
+      const forceAdvance = currentRetries + 1 >= 2;
 
       if (forceAdvance) {
         await prisma.user.update({
