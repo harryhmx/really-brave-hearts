@@ -25,6 +25,10 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  if (user.selectedStoryId) {
+    redirect("/story");
+  }
+
   if (user.usertype === "teacher") {
     const students = await prisma.user.findMany({
       where: { usertype: "student" },

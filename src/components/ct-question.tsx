@@ -19,6 +19,7 @@ export default function CTQuestion({
   const [loading, setLoading] = useState(false);
   const countdown = useLoadingTimer(loading, 60);
   const [success, setSuccess] = useState(false);
+  const [stageCompleted, setStageCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const parsed: ParsedQuestion | null = useMemo(
@@ -52,15 +53,24 @@ export default function CTQuestion({
         return;
       }
 
-      setSuccess(true);
-      setTimeout(() => {
-        router.refresh();
-      }, 1500);
+      const data = await res.json();
+      if (data.stageCompleted) {
+        setStageCompleted(true);
+      } else {
+        setSuccess(true);
+        setTimeout(() => {
+          router.refresh();
+        }, 1500);
+      }
     } catch {
       setError("Network error, please try again");
       setLoading(false);
     }
   };
+
+  if (stageCompleted) {
+    return null;
+  }
 
   if (success) {
     return (

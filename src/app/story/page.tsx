@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
 import CTQuestion from "@/components/ct-question";
+import StoryCompleted from "@/components/story-completed";
 import Link from "next/link";
 import { ArrowLeft, Star } from "lucide-react";
 
@@ -20,6 +21,7 @@ export default async function StoryPage() {
       selectedProjectId: true,
       storyPhase: true,
       score: true,
+      selectedProject: { select: { title: true } },
     },
   });
 
@@ -72,6 +74,14 @@ export default async function StoryPage() {
       {user.storyPhase === 2 && (
         <CTQuestion
           ctQuestion={story.ctQuestion}
+        />
+      )}
+
+      {user.storyPhase === 3 && user.selectedProjectId && (
+        <StoryCompleted
+          projectTitle={user.selectedProject.title}
+          projectId={user.selectedProjectId}
+          score={user.score}
         />
       )}
       </div>
