@@ -79,7 +79,7 @@ export default async function StoryPage() {
 
       {user.storyPhase === 3 && user.selectedProjectId && (
         <StoryCompleted
-          projectTitle={user.selectedProject.title}
+          projectTitle={user.selectedProject?.title ?? "Story"}
           projectId={user.selectedProjectId}
           score={user.score}
         />
