@@ -25,8 +25,15 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  if (user.selectedStoryId) {
+  if (user.selectedStoryId && user.storyPhase !== 3) {
     redirect("/story");
+  }
+
+  if (user.storyPhase === 3) {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { selectedStoryId: null, selectedProjectId: null, storyPhase: 0 },
+    });
   }
 
   if (user.usertype === "teacher") {

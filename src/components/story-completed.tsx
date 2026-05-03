@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Trophy, ArrowRight, RotateCcw, Loader2 } from "lucide-react";
+import { Trophy, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
@@ -42,7 +42,7 @@ export default function StoryCompleted({
       <div className="bg-gradient-to-r from-[#ffd700] to-[#ffa500] px-6 py-4">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <Trophy className="h-6 w-6" />
-          Stage Completed!
+          Story Completed!
         </h2>
       </div>
       <div className="p-6 space-y-6">
@@ -53,7 +53,7 @@ export default function StoryCompleted({
           <div>
             <h3 className="font-bold text-[#4a148c] dark:text-[#c4a8e8]">{projectTitle}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Congratulations! You have successfully completed this stage. +20 bonus points!
+              Congratulations! You have successfully completed this story. +20 bonus points!
             </p>
           </div>
         </div>
@@ -62,25 +62,14 @@ export default function StoryCompleted({
           <span className="font-bold text-lg">Total Score: {score}</span>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            className="flex-1 h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
-            onClick={handleNextStory}
-            disabled={loading}
-          >
-            {loading ? <Loader2 className="animate-spin" /> : <ArrowRight className="h-4 w-4 mr-1" />}
-            {loading ? `Generating next story... (${countdown})` : "Next Story"}
-          </Button>
-          <Button
-            variant="outline"
-            className="flex-1 h-11 rounded-xl"
-            onClick={() => router.push("/dashboard")}
-            disabled={loading}
-          >
-            <RotateCcw className="h-4 w-4 mr-1" />
-            Back to Dashboard
-          </Button>
-        </div>
+        <Button
+          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          onClick={handleNextStory}
+          disabled={loading}
+        >
+          {loading ? <Loader2 className="animate-spin" /> : <ArrowRight className="h-4 w-4 mr-1" />}
+          {loading ? `Generating next story... (${countdown})` : "Next Story"}
+        </Button>
       </div>
     </div>
   );

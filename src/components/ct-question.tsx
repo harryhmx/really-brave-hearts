@@ -56,6 +56,9 @@ export default function CTQuestion({
       const data = await res.json();
       if (data.stageCompleted) {
         setStageCompleted(true);
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
       } else {
         setSuccess(true);
         setTimeout(() => {
