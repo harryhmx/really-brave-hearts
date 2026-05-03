@@ -15,6 +15,7 @@ export default function CTQuestion({
 }) {
   const router = useRouter();
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedLabel, setSelectedLabel] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const countdown = useLoadingTimer(loading, 60);
   const [success, setSuccess] = useState(false);
@@ -41,7 +42,7 @@ export default function CTQuestion({
       const res = await fetch("/api/story/answer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "ct", choice: selected }),
+        body: JSON.stringify({ type: "ct", choice: selected, choiceLabel: selectedLabel }),
       });
 
       if (!res.ok) {
@@ -86,6 +87,7 @@ export default function CTQuestion({
         <div className="space-y-2">
           {parsed.choices.map((c) => {
             const isSelected = selected === c.value;
+            const isCorrectAnswer = c.value.toLowerCase() === rcAnswer?.toLowerCase();
             let borderClass =
               "border-pink-100 dark:border-pink-900/30 hover:border-[#ff6b95]/50";
 
@@ -97,7 +99,10 @@ export default function CTQuestion({
               <button
                 key={c.value}
                 onClick={() => {
-                  if (!loading) setSelected(c.value);
+                  if (!loading) {
+                    setSelected(c.value);
+                    setSelectedLabel(c.label);
+                  }
                 }}
                 disabled={loading}
                 className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass}`}

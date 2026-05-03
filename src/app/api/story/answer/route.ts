@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { type, answer, choice } = body;
+    const { type, answer, choice, choiceLabel } = body;
 
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
@@ -127,7 +127,7 @@ export async function POST(request: Request) {
             user_level: user.level,
             project_id: project.id,
             require_story_id: story.id,
-            require_choice: choice,
+            require_choice: choiceLabel || choice,
             depth: story.depth + 1,
             parent_story_title: story.title,
             parent_story_content: story.content,
