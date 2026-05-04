@@ -16,6 +16,7 @@ export default async function StoryPage() {
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: {
+      username: true,
       selectedStoryId: true,
       selectedProjectId: true,
       storyPhase: true,
@@ -70,7 +71,9 @@ export default async function StoryPage() {
 
       {user.storyPhase === 3 && user.selectedProjectId && (
         <StoryCompleted
+          userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}
+          storyTitle={story.title}
           projectId={user.selectedProjectId}
           score={user.score}
         />

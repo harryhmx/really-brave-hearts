@@ -6,15 +6,29 @@ import { Trophy, ArrowRight, RotateCcw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
 
+const encouragements = [
+  "Keep up the amazing work — every story makes you smarter!",
+  "You're becoming a reading superstar!",
+  "Well done! Your English skills are growing every day!",
+  "Fantastic effort! Keep exploring new stories!",
+  "You're on fire! Can't wait to see what you learn next!",
+];
+
 export default function StoryCompleted({
+  userName,
   projectTitle,
+  storyTitle,
   projectId,
   score,
 }: {
+  userName: string;
   projectTitle: string;
+  storyTitle: string;
   projectId: string;
   score: number;
 }) {
+  const displayName = userName || "Brave Reader";
+  const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
   const router = useRouter();
   const [nextLoading, setNextLoading] = useState(false);
   const [restartLoading, setRestartLoading] = useState(false);
@@ -65,7 +79,7 @@ export default function StoryCompleted({
           <div>
             <h3 className="font-bold text-[#4a148c] dark:text-[#c4a8e8]">{projectTitle}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Congratulations! You have successfully completed this story. +20 bonus points!
+              Great job, {displayName}! You just finished <strong>&ldquo;{storyTitle}&rdquo;</strong> with a score of <strong>{score}</strong> points. {encouragement}
             </p>
           </div>
         </div>
