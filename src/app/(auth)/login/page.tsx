@@ -91,12 +91,6 @@ export default function LoginPage() {
               {loading ? `Logging in... (${timer})` : "Log In"}
             </Button>
             <p className="text-sm text-center text-muted-foreground">
-              Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-primary hover:underline">
-                Sign Up
-              </Link>
-            </p>
-            <p className="text-sm text-center text-muted-foreground">
               Prefer phone number?{" "}
               <Link href="/sms-verify" className="text-primary hover:underline">
                 SMS Verify

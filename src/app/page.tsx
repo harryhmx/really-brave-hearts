@@ -142,17 +142,11 @@ export default function Home() {
             Join thousands of young learners exploring English through interactive stories and games
           </p>
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <Link href="/register">
+            <Link href="/sms-verify">
               <Button size="lg" className="bg-gradient-to-r from-[#ff6b95] to-[#ff8e88] text-white border-0 hover:from-[#ff527b] hover:to-[#ff7a73] shadow-lg shadow-pink-200 dark:shadow-pink-900/30">
-                Sign Up Now
+                Get Started
               </Button>
             </Link>
-            <span className="text-sm text-[#4a148c]/60 dark:text-[#c4a8e8]/50">
-              Already have an account?{" "}
-              <Link href="/login" className="text-[#311b92] dark:text-[#d4b8ff] hover:underline font-medium">
-                Log In
-              </Link>
-            </span>
           </div>
         </div>
       </section>

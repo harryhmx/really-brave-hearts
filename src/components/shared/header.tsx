@@ -52,11 +52,6 @@ export function Header() {
                   Log In
                 </Button>
               </Link>
-              <Link href="/register">
-                <Button size="sm" className="bg-gradient-to-r from-[#ff8a65] to-[#ff7043] text-white dark:from-[#4a148c] dark:to-[#311b92] border-0 hover:from-[#ff7043] hover:to-[#f4511e] dark:hover:from-[#311b92] dark:hover:to-[#4a148c]">
-                  Sign Up
-                </Button>
-              </Link>
             </nav>
           )}
         </div>
