@@ -28,7 +28,7 @@ export default function StoryCompleted({
   score: number;
 }) {
   const displayName = userName
-    ? userName.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ")
+    ? userName.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ")
     : "Brave Reader";
   const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
   const router = useRouter();
@@ -77,7 +77,7 @@ export default function StoryCompleted({
         <div>
             <h3 className="font-bold text-[#4a148c] dark:text-[#c4a8e8]">{projectTitle}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Great job, <strong className="text-[#4a148c] dark:text-[#c4a8e8]">{displayName}</strong>! You just finished <strong>&ldquo;{storyTitle}&rdquo;</strong> with a score of <strong>{score}</strong> points. {encouragement}
+              Great job, <strong className="text-[#ff6b95] dark:text-[#ff9ec5]">{displayName}</strong>! You just finished <strong>&ldquo;{storyTitle}&rdquo;</strong> with a score of <strong>{score}</strong> points. {encouragement}
             </p>
           </div>
 
