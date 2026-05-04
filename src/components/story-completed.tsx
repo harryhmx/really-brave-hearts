@@ -27,7 +27,9 @@ export default function StoryCompleted({
   projectId: string;
   score: number;
 }) {
-  const displayName = userName || "Brave Reader";
+  const displayName = userName
+    ? userName.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ")
+    : "Brave Reader";
   const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
   const router = useRouter();
   const [nextLoading, setNextLoading] = useState(false);
@@ -72,17 +74,12 @@ export default function StoryCompleted({
         </h2>
       </div>
       <div className="p-6 space-y-6">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ffd700] to-[#ffa500] flex items-center justify-center flex-shrink-0">
-            <Trophy className="h-6 w-6 text-white" />
-          </div>
-          <div>
+        <div>
             <h3 className="font-bold text-[#4a148c] dark:text-[#c4a8e8]">{projectTitle}</h3>
             <p className="text-sm text-muted-foreground mt-1">
-              Great job, {displayName}! You just finished <strong>&ldquo;{storyTitle}&rdquo;</strong> with a score of <strong>{score}</strong> points. {encouragement}
+              Great job, <strong className="text-[#4a148c] dark:text-[#c4a8e8]">{displayName}</strong>! You just finished <strong>&ldquo;{storyTitle}&rdquo;</strong> with a score of <strong>{score}</strong> points. {encouragement}
             </p>
           </div>
-        </div>
 
         <div className="flex items-center justify-center gap-2 text-[#ffd700] dark:text-[#ffcc00]">
           <span className="font-bold text-lg">Total Score: {score}</span>
