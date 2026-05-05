@@ -6,9 +6,7 @@ import { redirect } from "next/navigation";
 import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
 import CTQuestion from "@/components/ct-question";
-import StoryLifeLesson from "@/components/story-life-lesson";
 import StoryCompleted from "@/components/story-completed";
-import { getRandomLesson } from "@/lib/life-lessons";
 import { Star } from "lucide-react";
 
 export default async function StoryPage() {
@@ -62,18 +60,7 @@ export default async function StoryPage() {
         />
       )}
 
-      {user.storyPhase === 1 && isConclusion && (
-        <StoryLifeLesson lesson={getRandomLesson()} />
-      )}
-
-      {user.storyPhase === 1 && !isConclusion && (
-        <RCQuestion
-          rcQuestion={story.rcQuestion}
-          rcAnswer={story.rcAnswer}
-        />
-      )}
-
-      {user.storyPhase === 2 && isConclusion && user.selectedProjectId && (
+      {user.storyPhase === 1 && isConclusion && user.selectedProjectId && (
         <StoryCompleted
           userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}
@@ -81,6 +68,13 @@ export default async function StoryPage() {
           projectId={user.selectedProjectId}
           storyDepth={story.depth}
           score={user.score}
+        />
+      )}
+
+      {user.storyPhase === 1 && !isConclusion && (
+        <RCQuestion
+          rcQuestion={story.rcQuestion}
+          rcAnswer={story.rcAnswer}
         />
       )}
 

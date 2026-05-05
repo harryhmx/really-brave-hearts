@@ -16,7 +16,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "Invalid phase" }, { status: 400 });
     }
 
-    if (phase === 2) {
+    if (phase === 1) {
       const user = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: { selectedStoryId: true },
@@ -32,7 +32,7 @@ export async function PATCH(request: Request) {
           await prisma.user.update({
             where: { id: session.user.id },
             data: {
-              storyPhase: 2,
+              storyPhase: 1,
               score: { increment: 20 },
             },
           });

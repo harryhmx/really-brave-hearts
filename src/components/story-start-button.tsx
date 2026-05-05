@@ -39,7 +39,7 @@ export default function StoryStartButton({
   };
 
   const buttonText = isConclusion
-    ? (loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Get Life Lesson")
+    ? (loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Next")
     : (loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Answer Questions");
 
   return (
