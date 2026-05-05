@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
+import CTQuestion from "@/components/ct-question";
 import StoryLifeLesson from "@/components/story-life-lesson";
 import StoryCompleted from "@/components/story-completed";
 import { getRandomLesson } from "@/lib/life-lessons";
@@ -72,13 +73,20 @@ export default async function StoryPage() {
         />
       )}
 
-      {user.storyPhase === 2 && user.selectedProjectId && (
+      {user.storyPhase === 2 && isConclusion && user.selectedProjectId && (
         <StoryCompleted
           userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}
           storyTitle={story.title}
           projectId={user.selectedProjectId}
+          storyDepth={story.depth}
           score={user.score}
+        />
+      )}
+
+      {user.storyPhase === 2 && !isConclusion && (
+        <CTQuestion
+          ctQuestion={story.ctQuestion}
         />
       )}
       </div>

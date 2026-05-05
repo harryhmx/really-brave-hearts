@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Trophy, ArrowRight, RotateCcw, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
@@ -19,19 +18,20 @@ export default function StoryCompleted({
   projectTitle,
   storyTitle,
   projectId,
+  storyDepth,
   score,
 }: {
   userName: string;
   projectTitle: string;
   storyTitle: string;
   projectId: string;
+  storyDepth: number;
   score: number;
 }) {
   const displayName = userName
     ? userName.split("_").map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(" ")
     : "Brave Reader";
-  const encouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
-  const router = useRouter();
+  const [encouragement] = useState(() => encouragements[Math.floor(Math.random() * encouragements.length)]);
   const [nextLoading, setNextLoading] = useState(false);
   const [restartLoading, setRestartLoading] = useState(false);
   const nextCountdown = useLoadingTimer(nextLoading, 60);
@@ -53,7 +53,12 @@ export default function StoryCompleted({
       const res = await fetch("/api/story", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId, freshStory: true }),
+        body: JSON.stringify({
+          projectId,
+          freshStory: true,
+          depth: storyDepth + 1,
+          parentStoryTitle: storyTitle,
+        }),
       });
       if (!res.ok) {
         setNextLoading(false);

@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { RBH_SKILLS_URL } from "@/lib/config";
 
+const CONCLUSION_CONTINUATION = "The journey continues with lessons learned from the previous adventure";
+
 export async function POST(request: Request) {
   try {
     const session = await auth();
@@ -11,14 +13,17 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { projectId, requireStoryId, requireChoice, depth, parentStoryTitle, freshStory } = body;
+    const {
+      projectId, requireStoryId, requireChoice, depth,
+      parentStoryTitle, parentStoryContent, freshStory,
+    } = body;
     if (!projectId) {
       return NextResponse.json({ error: "projectId is required" }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { id: true, age: true, level: true },
+      select: { id: true, age: true, level: true, selectedStoryId: true },
     });
     if (!user?.age || !user?.level) {
       return NextResponse.json({ error: "Profile incomplete" }, { status: 400 });
@@ -45,6 +50,21 @@ export async function POST(request: Request) {
     let mediaReady = !!story?.imageUrl && !!story?.audioUrl;
 
     if (!story) {
+      const nextDepth = depth ?? 0;
+      let effectiveParentContent = parentStoryContent ?? null;
+      let effectiveRequireChoice = requireChoice ?? null;
+
+      if (freshStory && parentStoryTitle && !requireChoice) {
+        const prevStory = user.selectedStoryId
+          ? await prisma.story.findUnique({
+              where: { id: user.selectedStoryId },
+              select: { content: true },
+            })
+          : null;
+        effectiveParentContent = prevStory?.content ?? null;
+        effectiveRequireChoice = CONCLUSION_CONTINUATION;
+      }
+
       const skillsRes = await fetch(`${RBH_SKILLS_URL}/api/story/generate`, {
         method: "POST",
         headers: {
@@ -58,9 +78,10 @@ export async function POST(request: Request) {
           user_level: user.level,
           project_id: project.id,
           require_story_id: requireStoryId ?? null,
-          require_choice: requireChoice ?? null,
-          depth: depth ?? 0,
+          require_choice: effectiveRequireChoice,
+          depth: nextDepth,
           parent_story_title: parentStoryTitle ?? null,
+          parent_story_content: effectiveParentContent,
           fresh_story: true,
         }),
       });
