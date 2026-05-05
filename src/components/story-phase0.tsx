@@ -10,12 +10,14 @@ export default function StoryPhase0({
   imageUrl,
   audioUrl,
   storyId,
+  isConclusion = false,
 }: {
   title: string;
   content: string | null;
   imageUrl?: string | null;
   audioUrl?: string | null;
   storyId: string;
+  isConclusion?: boolean;
 }) {
   const [mediaReady, setMediaReady] = useState(!!imageUrl && !!audioUrl);
 
@@ -33,7 +35,7 @@ export default function StoryPhase0({
         storyId={storyId}
         onMediaReady={handleMediaReady}
       />
-      <StoryStartButton mediaReady={mediaReady} />
+      <StoryStartButton mediaReady={mediaReady} isConclusion={isConclusion} />
     </div>
   );
 }

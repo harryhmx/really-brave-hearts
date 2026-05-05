@@ -5,8 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import StoryPhase0 from "@/components/story-phase0";
 import RCQuestion from "@/components/rc-question";
-import CTQuestion from "@/components/ct-question";
+import StoryLifeLesson from "@/components/story-life-lesson";
 import StoryCompleted from "@/components/story-completed";
+import { getRandomLesson } from "@/lib/life-lessons";
 import { Star } from "lucide-react";
 
 export default async function StoryPage() {
@@ -33,10 +34,13 @@ export default async function StoryPage() {
       id: true, title: true, content: true,
       imageUrl: true, audioUrl: true,
       rcQuestion: true, rcAnswer: true, ctQuestion: true,
+      depth: true,
     },
   });
 
   if (!story) redirect("/dashboard");
+
+  const isConclusion = (story.depth + 1) % 4 === 0;
 
   return (
     <>
@@ -53,23 +57,22 @@ export default async function StoryPage() {
           imageUrl={story.imageUrl}
           audioUrl={story.audioUrl}
           storyId={story.id}
+          isConclusion={isConclusion}
         />
       )}
 
-      {user.storyPhase === 1 && (
+      {user.storyPhase === 1 && isConclusion && (
+        <StoryLifeLesson lesson={getRandomLesson()} />
+      )}
+
+      {user.storyPhase === 1 && !isConclusion && (
         <RCQuestion
           rcQuestion={story.rcQuestion}
           rcAnswer={story.rcAnswer}
         />
       )}
 
-      {user.storyPhase === 2 && (
-        <CTQuestion
-          ctQuestion={story.ctQuestion}
-        />
-      )}
-
-      {user.storyPhase === 3 && user.selectedProjectId && (
+      {user.storyPhase === 2 && user.selectedProjectId && (
         <StoryCompleted
           userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}

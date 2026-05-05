@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 
 export default function StoryStartButton({
   mediaReady = true,
+  isConclusion = false,
 }: {
   mediaReady?: boolean;
+  isConclusion?: boolean;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -36,6 +38,10 @@ export default function StoryStartButton({
     }
   };
 
+  const buttonText = isConclusion
+    ? (loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Get Life Lesson")
+    : (loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Answer Questions");
+
   return (
     <div className="space-y-2">
       <Button
@@ -44,7 +50,7 @@ export default function StoryStartButton({
         disabled={loading || !mediaReady}
       >
         {loading && <Loader2 className="animate-spin" />}
-        {loading ? "Loading..." : !mediaReady ? "Waiting for story to fully load..." : "Answer Questions"}
+        {buttonText}
       </Button>
       {!mediaReady && (
         <p className="text-xs text-muted-foreground text-center animate-pulse">

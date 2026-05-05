@@ -19,7 +19,6 @@ export default function CTQuestion({
   const [loading, setLoading] = useState(false);
   const countdown = useLoadingTimer(loading, 60);
   const [success, setSuccess] = useState(false);
-  const [stageCompleted, setStageCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const parsed: ParsedQuestion | null = useMemo(
@@ -53,34 +52,15 @@ export default function CTQuestion({
         return;
       }
 
-      const data = await res.json();
-      if (data.stageCompleted) {
-        setStageCompleted(true);
-        setTimeout(() => {
-          router.refresh();
-        }, 500);
-      } else {
-        setSuccess(true);
-        setTimeout(() => {
-          router.refresh();
-        }, 1500);
-      }
+      setSuccess(true);
+      setTimeout(() => {
+        router.refresh();
+      }, 1500);
     } catch {
       setError("Network error, please try again");
       setLoading(false);
     }
   };
-
-  if (stageCompleted) {
-    return (
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-        <div className="flex items-center justify-center gap-2 text-[#ffd700] dark:text-[#ffcc00] font-medium animate-pulse">
-          <Loader2 className="animate-spin h-6 w-6" />
-          Story Completed! Loading...
-        </div>
-      </div>
-    );
-  }
 
   if (success) {
     return (

@@ -91,27 +91,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "No project selected" }, { status: 400 });
       }
 
-      const isStageCompleted = (story.depth + 1) % 4 === 0;
-
-      if (isStageCompleted) {
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            storyPhase: 3,
-            score: { increment: 20 },
-          },
-          select: { score: true },
-        });
-        return NextResponse.json({
-          stageCompleted: true,
-          projectId: user.selectedProjectId,
-          projectTitle: (await prisma.project.findUnique({
-            where: { id: user.selectedProjectId },
-            select: { title: true },
-          }))?.title ?? "Story",
-        });
-      }
-
       const project = await prisma.project.findUnique({
         where: { id: user.selectedProjectId },
         select: { id: true, title: true, description: true },
