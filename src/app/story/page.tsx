@@ -25,7 +25,9 @@ export default async function StoryPage() {
     },
   });
 
-  if (!user?.selectedStoryId) redirect("/dashboard");
+  if (!user) redirect("/api/auth/signout?callbackUrl=/login");
+
+  if (!user.selectedStoryId) redirect("/dashboard");
 
   const story = await prisma.story.findUnique({
     where: { id: user.selectedStoryId },

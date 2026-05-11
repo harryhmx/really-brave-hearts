@@ -22,7 +22,7 @@ export default async function DashboardPage() {
   });
 
   if (!user) {
-    redirect("/login");
+    redirect("/api/auth/signout?callbackUrl=/login");
   }
 
   if (user.selectedStoryId && user.storyPhase !== 3) {
