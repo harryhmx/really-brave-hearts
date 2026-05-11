@@ -102,6 +102,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.level = user.level;
         token.score = user.score;
         token.usertype = user.usertype;
+      } else if (token.id) {
+        const existing = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { id: true },
+        });
+        if (!existing) {
+          return { ...token, id: undefined } as never;
+        }
       }
       return token;
     },
