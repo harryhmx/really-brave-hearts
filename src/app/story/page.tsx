@@ -66,9 +66,7 @@ export default async function StoryPage() {
         <StoryCompleted
           userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}
-          storyTitle={story.title}
           projectId={user.selectedProjectId}
-          storyDepth={story.depth}
           score={user.score}
         />
       )}

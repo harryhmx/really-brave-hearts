@@ -16,16 +16,12 @@ const encouragements = [
 export default function StoryCompleted({
   userName,
   projectTitle,
-  storyTitle,
   projectId,
-  storyDepth,
   score,
 }: {
   userName: string;
   projectTitle: string;
-  storyTitle: string;
   projectId: string;
-  storyDepth: number;
   score: number;
 }) {
   const displayName = userName
@@ -56,8 +52,6 @@ export default function StoryCompleted({
         body: JSON.stringify({
           projectId,
           freshStory: true,
-          depth: storyDepth + 1,
-          parentStoryTitle: storyTitle,
         }),
       });
       if (!res.ok) {
