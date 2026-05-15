@@ -29,7 +29,7 @@ export default async function StoryEditPage() {
     <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
       <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
         <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
-          <h2 className="text-xl font-bold text-white">Edit Project</h2>
+          <h2 className="text-xl font-bold text-white">Edit Story</h2>
         </div>
         <div className="p-6">
           <ProjectEditForm project={project} />

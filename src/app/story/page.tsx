@@ -49,7 +49,9 @@ export default async function StoryPage() {
           <div className="p-6 space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Description</h3>
-              <p className="text-[#4a148c] dark:text-[#c4a8e8]">{project.description || "—"}</p>
+              <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
+                {project.description || "—"}
+              </pre>
             </div>
 
             <div>

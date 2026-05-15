@@ -67,8 +67,8 @@ export default function ProjectEditForm({
         <Label htmlFor="description">Description</Label>
         <textarea
           id="description"
-          rows={3}
-          className="flex w-full rounded-xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a855f7]/30 resize-y"
+          rows={10}
+          className="flex w-full rounded-xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a855f7]/30 resize-y font-mono"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
