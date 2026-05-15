@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     const project = await prisma.project.findUnique({
       where: { id: projectId },
-      select: { id: true, title: true, description: true },
+      select: { id: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true },
     });
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
@@ -63,6 +63,8 @@ export async function POST(request: Request) {
           depth: depth ?? 0,
           parent_story_title: parentStoryTitle ?? null,
           parent_story_content: parentStoryContent ?? null,
+          system_prompt: project.systemPrompt ?? null,
+          conclusion_prompt: project.conclusionPrompt ?? null,
           fresh_story: true,
         }),
       });

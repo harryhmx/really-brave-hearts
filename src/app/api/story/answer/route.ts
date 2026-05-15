@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
       const project = await prisma.project.findUnique({
         where: { id: user.selectedProjectId },
-        select: { id: true, title: true, description: true },
+        select: { id: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true },
       });
 
       if (!project) {
@@ -131,6 +131,8 @@ export async function POST(request: Request) {
             depth: story.depth + 1,
             parent_story_title: story.title,
             parent_story_content: story.content,
+            system_prompt: project.systemPrompt ?? null,
+            conclusion_prompt: project.conclusionPrompt ?? null,
           }),
         });
 
