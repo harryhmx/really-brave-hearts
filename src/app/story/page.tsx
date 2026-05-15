@@ -44,14 +44,9 @@ export default async function StoryPage() {
       <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
         <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
           <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
-            <h2 className="text-xl font-bold text-white">Project Details</h2>
+            <h2 className="text-xl font-bold text-white">{project.title}</h2>
           </div>
           <div className="p-6 space-y-6">
-            <div>
-              <h3 className="text-sm font-semibold text-muted-foreground mb-1">Title</h3>
-              <p className="text-[#4a148c] dark:text-[#c4a8e8] font-medium">{project.title}</p>
-            </div>
-
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Description</h3>
               <p className="text-[#4a148c] dark:text-[#c4a8e8]">{project.description || "—"}</p>

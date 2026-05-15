@@ -105,7 +105,7 @@ export default async function DashboardPage() {
             </tbody>
           </table>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center">
           <Link href="/story">
             <button className="h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white px-6 rounded-xl flex items-center gap-2 hover:from-[#ff527b] hover:to-[#9333ea] transition-all">
               View Story
