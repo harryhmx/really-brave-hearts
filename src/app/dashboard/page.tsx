@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { toDisplayName } from "@/lib/utils";
 import ProfileForm from "@/components/profile-form";
 import ProjectCard from "@/components/project-card";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -103,6 +104,13 @@ export default async function DashboardPage() {
               )}
             </tbody>
           </table>
+        </div>
+        <div className="mt-4">
+          <Link href="/story">
+            <button className="h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white px-6 rounded-xl flex items-center gap-2 hover:from-[#ff527b] hover:to-[#9333ea] transition-all">
+              View Story
+            </button>
+          </Link>
         </div>
       </div>
     );
