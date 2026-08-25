@@ -9,6 +9,11 @@ export async function POST() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const current = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { selectedProjectId: true },
+    });
+
     await prisma.user.update({
       where: { id: session.user.id },
       data: {
@@ -17,6 +22,13 @@ export async function POST() {
         storyPhase: 0,
       },
     });
+
+    if (current?.selectedProjectId) {
+      await prisma.storyProgress.updateMany({
+        where: { userId: session.user.id, projectId: current.selectedProjectId },
+        data: { storyId: null, phase: 0, status: "not_started", completedAt: null },
+      });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

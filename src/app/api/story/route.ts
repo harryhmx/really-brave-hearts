@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { RBH_SKILLS_URL } from "@/lib/config";
+import { persistSkillsStory, upsertStoryProgress } from "@/lib/story-service";
 
 export async function POST(request: Request) {
   try {
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
 
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { id: true, age: true, level: true },
+      select: { id: true, age: true, level: true, score: true },
     });
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           project_title: project.title,
           project_description: project.description ?? "",
+          project_slug: project.slug,
           user_age: user.age,
           user_level: user.level,
           project_id: project.id,
@@ -85,7 +87,12 @@ export async function POST(request: Request) {
       }
 
       const skillsData = await skillsRes.json();
-      story = skillsData.story;
+      story = await persistSkillsStory({
+        projectId: project.id,
+        age: user.age,
+        level: user.level,
+        story: skillsData.story,
+      });
       mediaReady = skillsData.mediaReady ?? false;
     }
 
@@ -100,6 +107,14 @@ export async function POST(request: Request) {
         selectedStoryId: story.id,
         storyPhase: 0,
       },
+    });
+    await upsertStoryProgress({
+      userId: user.id,
+      projectId: project.id,
+      storyId: story.id,
+      level: user.level,
+      score: user.score,
+      phase: 0,
     });
 
     return NextResponse.json({ story, mediaReady });

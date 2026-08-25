@@ -46,25 +46,25 @@ export default function ProjectCard({
 
   return (
     <div className="w-full max-w-lg mx-auto animate-fade-in-up">
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
+      <div className="overflow-hidden rounded-md border border-rbh-ink/10 bg-rbh-panel/45">
+        <div className="border-b border-rbh-ink/10 bg-rbh-header px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-              <BookOpen className="h-5 w-5 text-white" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-rbh-teal/20">
+              <BookOpen className="h-5 w-5 text-rbh-gold" />
             </div>
-            <h3 className="text-xl font-bold text-white">{title}</h3>
+            <h3 className="text-xl font-bold text-rbh-header-text">{title}</h3>
           </div>
         </div>
 
         <div className="p-6">
           {description && (
-            <p className="text-[#4a148c]/70 dark:text-[#c4a8e8]/60 mb-6 leading-relaxed">
+            <p className="mb-6 leading-relaxed text-rbh-ink/70">
               {description}
             </p>
           )}
 
           <Button
-            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+            className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
             onClick={handleStart}
             disabled={loading}
           >

@@ -28,7 +28,7 @@ export default function CTQuestion({
 
   if (!parsed) {
     return (
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-6 text-center">
+      <div className="rounded-md border border-rbh-ink/10 bg-rbh-panel/45 p-6 text-center">
         <p className="text-muted-foreground">No CT question available.</p>
       </div>
     );
@@ -64,8 +64,8 @@ export default function CTQuestion({
 
   if (success) {
     return (
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-        <div className="flex items-center justify-center gap-2 text-[#7c3aed] dark:text-[#a78bfa] font-medium animate-pulse">
+      <div className="rounded-md border border-rbh-ink/10 bg-rbh-panel/45 p-8 text-center">
+        <div className="flex items-center justify-center gap-2 text-rbh-teal font-medium animate-pulse">
           <Sparkles className="h-6 w-6" />
           Great choice! Loading your next adventure...
         </div>
@@ -74,13 +74,14 @@ export default function CTQuestion({
   }
 
   return (
-    <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-      <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
-        <h2 className="text-xl font-bold text-white">Critical Thinking</h2>
+    <div className="overflow-hidden rounded-md border border-rbh-ink/10 bg-rbh-panel/45">
+      <div className="border-b border-rbh-ink/10 bg-rbh-header px-6 py-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rbh-gold">STORY CHECKPOINT</p>
+        <h2 className="mt-2 text-xl font-bold text-rbh-header-text">Critical Thinking</h2>
       </div>
       <div className="p-6 space-y-5">
         <div
-          className="prose prose-purple dark:prose-invert max-w-none"
+          className="prose max-w-none text-rbh-ink prose-headings:text-rbh-ink prose-p:text-rbh-ink/80 prose-strong:text-rbh-ink"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(parsed.question) }}
         />
 
@@ -88,10 +89,10 @@ export default function CTQuestion({
           {parsed.choices.map((c) => {
             const isSelected = selected === c.value;
             let borderClass =
-              "border-pink-100 dark:border-pink-900/30 hover:border-[#ff6b95]/50";
+              "border-rbh-ink/10 hover:border-rbh-coral/60";
 
             if (isSelected) {
-              borderClass = "border-[#ff6b95] bg-pink-50 dark:bg-pink-900/20";
+              borderClass = "border-rbh-coral bg-rbh-coral/10";
             }
 
             return (
@@ -106,7 +107,7 @@ export default function CTQuestion({
                 disabled={loading}
                 className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass}`}
               >
-                <span className="font-medium text-[#4a148c] dark:text-[#c4a8e8]">
+                <span className="font-medium text-rbh-ink">
                   {c.label}
                 </span>
               </button>
@@ -119,7 +120,7 @@ export default function CTQuestion({
         )}
 
         <Button
-          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
           onClick={handleSubmit}
           disabled={!selected || loading}
         >

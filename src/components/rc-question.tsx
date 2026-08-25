@@ -36,7 +36,7 @@ export default function RCQuestion({
 
   if (!parsed) {
     return (
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-6 text-center">
+      <div className="rounded-md border border-rbh-ink/10 bg-rbh-panel/45 p-6 text-center">
         <p className="text-muted-foreground">No RC question available.</p>
       </div>
     );
@@ -87,8 +87,8 @@ export default function RCQuestion({
 
   if (transitioning) {
     return (
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 text-center shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-        <div className="flex items-center justify-center gap-2 text-[#7c3aed] dark:text-[#a78bfa] font-medium animate-pulse">
+      <div className="rounded-md border border-rbh-ink/10 bg-rbh-panel/45 p-8 text-center">
+        <div className="flex items-center justify-center gap-2 text-rbh-teal font-medium animate-pulse">
           <Sparkles className="h-6 w-6" />
           {result?.correct
             ? `Correct! +10 points — loading next question (${countdown})`
@@ -99,13 +99,14 @@ export default function RCQuestion({
   }
 
   return (
-    <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-      <div className="bg-gradient-to-r from-[#a855f7] to-[#311b92] px-6 py-4">
-        <h2 className="text-xl font-bold text-white">Reading Comprehension</h2>
+    <div className="overflow-hidden rounded-md border border-rbh-ink/10 bg-rbh-panel/45">
+      <div className="border-b border-rbh-ink/10 bg-rbh-header px-6 py-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rbh-gold">STORY CHECKPOINT</p>
+        <h2 className="mt-2 text-xl font-bold text-rbh-header-text">Reading Comprehension</h2>
       </div>
       <div className="p-6 space-y-5">
         <div
-          className="prose prose-purple dark:prose-invert max-w-none"
+          className="prose max-w-none text-rbh-ink prose-headings:text-rbh-ink prose-p:text-rbh-ink/80 prose-strong:text-rbh-ink"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(parsed.question) }}
         />
 
@@ -114,7 +115,7 @@ export default function RCQuestion({
             const isSelected = selected === c.value;
             const isCorrectAnswer = c.value.toLowerCase() === rcAnswer?.toLowerCase();
             let borderClass =
-              "border-pink-100 dark:border-pink-900/30 hover:border-[#a855f7]/50";
+              "border-rbh-ink/10 hover:border-rbh-teal/50";
             let bgClass = "";
 
             if (result && result.correct) {
@@ -128,8 +129,8 @@ export default function RCQuestion({
                 bgClass = "bg-red-50 dark:bg-red-900/20";
               }
             } else if (isSelected) {
-              borderClass = "border-[#a855f7] ring-2 ring-[#a855f7]/30";
-              bgClass = "bg-purple-50 dark:bg-purple-900/20";
+              borderClass = "border-rbh-teal ring-2 ring-rbh-teal/30";
+              bgClass = "bg-rbh-teal/10";
             }
 
             return (
@@ -141,7 +142,7 @@ export default function RCQuestion({
                 disabled={!!result}
                 className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${borderClass} ${bgClass}`}
               >
-                <span className="font-medium text-[#4a148c] dark:text-[#c4a8e8]">
+                <span className="font-medium text-rbh-ink">
                   {c.label}
                 </span>
                 {result && result.correct && isCorrectAnswer && (
@@ -175,7 +176,7 @@ export default function RCQuestion({
         )}
 
         <Button
-          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
           onClick={handleSubmit}
           disabled={!selected || loading || !!result}
         >

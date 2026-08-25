@@ -66,16 +66,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center px-4 py-8">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Log In</CardTitle>
-          <CardDescription>
-            Enter your username and password
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="flex min-h-full flex-1 items-center justify-center bg-rbh-paper px-6 py-12 text-rbh-ink">
+      <Card className="w-full max-w-sm overflow-visible rounded-md border-0 bg-transparent p-0 ring-0">
+        <div className="rounded-md bg-rbh-panel/60 py-4 ring-1 ring-rbh-ink/10">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Log In</CardTitle>
+            <CardDescription>
+              Enter your username and password
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <p className="text-sm text-red-500 text-center">{error}</p>
             )}
@@ -84,6 +85,7 @@ export default function LoginPage() {
               <Input
                 id="username"
                 type="text"
+                className="border-rbh-ink/15 bg-white/80 dark:bg-rbh-header/45"
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -95,13 +97,14 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
+                className="border-rbh-ink/15 bg-white/80 dark:bg-rbh-header/45"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full rounded-md bg-rbh-coral text-white hover:brightness-95" disabled={loading}>
               {loading && <Loader2 className="animate-spin" />}
               {loading ? `Logging in... (${timer})` : "Log In"}
             </Button>
@@ -111,8 +114,9 @@ export default function LoginPage() {
                 SMS Verify
               </Link>
             </p>
-          </form>
-        </CardContent>
+            </form>
+          </CardContent>
+        </div>
       </Card>
     </div>
   );

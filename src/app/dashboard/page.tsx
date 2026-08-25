@@ -58,6 +58,24 @@ export default async function DashboardPage() {
             project: { select: { slug: true, title: true } },
           },
         },
+        storyProgresses: {
+          orderBy: { updatedAt: "desc" },
+          take: 1,
+          select: {
+            score: true,
+            phase: true,
+            status: true,
+            story: {
+              select: {
+                id: true,
+                title: true,
+                depth: true,
+                updatedAt: true,
+                project: { select: { slug: true, title: true } },
+              },
+            },
+          },
+        },
       },
     }),
     prisma.project.findMany({
@@ -87,6 +105,16 @@ export default async function DashboardPage() {
         selectedStory: {
           select: { title: true, depth: true },
         },
+        storyProgresses: {
+          where: { project: { slug: "adventure-academy" } },
+          orderBy: { updatedAt: "desc" },
+          take: 1,
+          select: {
+            phase: true,
+            status: true,
+            story: { select: { title: true, depth: true } },
+          },
+        },
       },
     }),
   ]);
@@ -102,10 +130,11 @@ export default async function DashboardPage() {
   const aaProject = projects.find((project) => project.slug === "adventure-academy");
   const isAaCreator = aaProject?.creatorId === currentUser.id;
   const hasSelectedAa = aaProject?.id === currentUser.selectedProjectId;
-  const currentStory = currentUser.selectedStory;
+  const currentProgress = currentUser.storyProgresses[0];
+  const currentStory = currentProgress?.story ?? currentUser.selectedStory;
   const currentStoryCompleted = Boolean(
     currentStory &&
-      currentUser.storyPhase === 1 &&
+      (currentProgress?.status === "completed" || currentProgress?.phase === 1 || currentUser.storyPhase === 1) &&
       (currentStory.depth + 1) % 4 === 0
   );
 
@@ -278,9 +307,9 @@ export default async function DashboardPage() {
                         <div className="min-w-0">
                           <p className="truncate font-semibold">{toDisplayName(student.username)}</p>
                           <p className="mt-1 truncate text-sm text-rbh-ink/55">
-                            {student.selectedStory?.title ?? "No story started"}
-                            {student.selectedStory && (
-                              <> · {studentStoryCompleted ? "Completed" : "In progress"}</>
+                            {student.storyProgresses[0]?.story?.title ?? student.selectedStory?.title ?? "No story started"}
+                            {(student.storyProgresses[0]?.story || student.selectedStory) && (
+                              <> · {(student.storyProgresses[0]?.status === "completed" || studentStoryCompleted) ? "Completed" : "In progress"}</>
                             )}
                           </p>
                         </div>

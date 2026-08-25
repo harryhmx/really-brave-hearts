@@ -60,34 +60,34 @@ export default function StoryCompleted({
         setNextLoading(false);
         return;
       }
-      window.location.href = "/story";
+      window.location.href = projectSlug ? `/project/${projectSlug}/learn` : "/story";
     } catch {
       setNextLoading(false);
     }
   };
 
   return (
-    <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-      <div className="bg-gradient-to-r from-[#ffd700] to-[#ffa500] px-6 py-4">
-        <h2 className="text-xl font-bold text-white flex items-center gap-2">
+    <div className="overflow-hidden rounded-md border border-rbh-ink/10 bg-rbh-panel/45">
+      <div className="border-b border-rbh-ink/10 bg-rbh-header px-6 py-5">
+        <h2 className="flex items-center gap-2 text-xl font-bold text-rbh-header-text">
           <Trophy className="h-6 w-6" />
           Story Completed!
         </h2>
       </div>
       <div className="p-6 space-y-6">
         <div>
-            <h3 className="font-bold text-[#4a148c] dark:text-[#c4a8e8]">{projectTitle}</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Great job, <strong className="text-[#ff6b95] dark:text-[#ff9ec5]">{displayName}</strong>! You just completed this story stage with a score of <strong>{score}</strong> points. {encouragement}
+            <h3 className="font-bold text-rbh-ink">{projectTitle}</h3>
+              <p className="text-sm text-rbh-ink/65 mt-1">
+              Great job, <strong className="text-rbh-coral">{displayName}</strong>! You just completed this story stage with a score of <strong>{score}</strong> points. {encouragement}
             </p>
           </div>
 
-        <div className="flex items-center justify-center gap-2 text-[#ffd700] dark:text-[#ffcc00]">
+        <div className="flex items-center justify-center gap-2 text-rbh-gold">
           <span className="font-bold text-lg">Total Score: {score}</span>
         </div>
 
         <Button
-          className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+          className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
           onClick={handleNextStory}
           disabled={nextLoading || restartLoading}
         >
@@ -97,7 +97,7 @@ export default function StoryCompleted({
 
         <Button
           variant="outline"
-          className="w-full h-11 rounded-xl"
+          className="w-full h-11 rounded-md"
           onClick={handleRestart}
           disabled={nextLoading || restartLoading}
         >

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 
 export default function ProjectEditForm({
   project,
+  redirectTo = "/dashboard",
 }: {
   project: {
     id: string;
@@ -16,6 +17,7 @@ export default function ProjectEditForm({
     systemPrompt: string | null;
     conclusionPrompt: string | null;
   };
+  redirectTo?: string;
 }) {
   const [title, setTitle] = useState(project.title);
   const [description, setDescription] = useState(project.description ?? "");
@@ -47,7 +49,7 @@ export default function ProjectEditForm({
         setLoading(false);
         return;
       }
-      window.location.href = "/story";
+      window.location.href = redirectTo;
     } catch {
       setError("Network error");
       setLoading(false);
@@ -68,7 +70,7 @@ export default function ProjectEditForm({
         <textarea
           id="description"
           rows={10}
-          className="flex w-full rounded-xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a855f7]/30 resize-y font-mono"
+          className="flex w-full resize-y rounded-md border border-rbh-ink/15 bg-rbh-paper px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rbh-teal/30 font-mono"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -79,7 +81,7 @@ export default function ProjectEditForm({
         <textarea
           id="systemPrompt"
           rows={10}
-          className="flex w-full rounded-xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a855f7]/30 resize-y font-mono"
+          className="flex w-full resize-y rounded-md border border-rbh-ink/15 bg-rbh-paper px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rbh-teal/30 font-mono"
           value={systemPrompt}
           onChange={(e) => setSystemPrompt(e.target.value)}
         />
@@ -90,7 +92,7 @@ export default function ProjectEditForm({
         <textarea
           id="conclusionPrompt"
           rows={10}
-          className="flex w-full rounded-xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#a855f7]/30 resize-y font-mono"
+          className="flex w-full resize-y rounded-md border border-rbh-ink/15 bg-rbh-paper px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-rbh-teal/30 font-mono"
           value={conclusionPrompt}
           onChange={(e) => setConclusionPrompt(e.target.value)}
         />
@@ -98,7 +100,7 @@ export default function ProjectEditForm({
 
       <Button
         type="submit"
-        className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] rounded-xl"
+        className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
         disabled={loading || !title.trim()}
       >
         {loading && <Loader2 className="animate-spin" />}

@@ -1,5 +1,5 @@
 import { marked } from "marked";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 marked.setOptions({
   breaks: true,

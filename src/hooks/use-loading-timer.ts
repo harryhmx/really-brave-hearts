@@ -7,8 +7,8 @@ export function useLoadingTimer(loading: boolean, duration = 10) {
 
   useEffect(() => {
     if (!loading) {
-      setTimer(duration);
-      return;
+      const resetTimer = window.setTimeout(() => setTimer(duration), 0);
+      return () => window.clearTimeout(resetTimer);
     }
 
     const interval = setInterval(() => {
@@ -16,7 +16,7 @@ export function useLoadingTimer(loading: boolean, duration = 10) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [loading]);
+  }, [duration, loading]);
 
   return timer > 0 ? `${timer}s` : "waiting";
 }

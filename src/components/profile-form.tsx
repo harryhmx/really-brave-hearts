@@ -50,13 +50,13 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto animate-fade-in-up">
-      <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] p-8 shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
+    <div className="mx-auto w-full max-w-md animate-fade-in-up">
+      <div className="rounded-md border border-rbh-ink/10 bg-rbh-panel/45 p-8">
         <div className="flex flex-col items-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#ff6b95] to-[#a855f7] flex items-center justify-center mb-4 shadow-md">
-            <UserCircle className="h-8 w-8 text-white" />
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-rbh-teal/15">
+            <UserCircle className="h-8 w-8 text-rbh-teal" />
           </div>
-          <h2 className="text-2xl font-bold text-[#311b92] dark:text-[#d4b8ff]">
+          <h2 className="text-2xl font-bold text-rbh-ink">
             Welcome!
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
@@ -72,7 +72,7 @@ export default function ProfileForm() {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="age" className="text-[#4a148c] dark:text-[#c4a8e8]">
+            <Label htmlFor="age" className="text-rbh-ink">
               Age
             </Label>
             <Input
@@ -89,7 +89,7 @@ export default function ProfileForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="level" className="text-[#4a148c] dark:text-[#c4a8e8]">
+            <Label htmlFor="level" className="text-rbh-ink">
               Lexile Level
             </Label>
             <Input
@@ -105,7 +105,7 @@ export default function ProfileForm() {
 
           <Button
             type="submit"
-            className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+            className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
             disabled={loading}
           >
             {loading && <Loader2 className="animate-spin" />}

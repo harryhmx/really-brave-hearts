@@ -45,7 +45,7 @@ export default function StoryStartButton({
   return (
     <div className="space-y-2">
       <Button
-        className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white border-0 hover:from-[#ff527b] hover:to-[#9333ea] shadow-md shadow-pink-200/50 dark:shadow-pink-900/30 rounded-xl"
+        className="w-full h-11 rounded-md border-0 bg-rbh-coral text-white hover:brightness-95"
         onClick={handleStart}
         disabled={loading || !mediaReady}
       >

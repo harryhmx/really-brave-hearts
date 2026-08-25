@@ -18,10 +18,17 @@ export async function PUT(request: Request) {
 
     const existingProject = await prisma.project.findUnique({
       where: { id },
-      select: { creatorId: true },
+      select: {
+        creatorId: true,
+        memberships: {
+          where: { userId: session.user.id },
+          select: { role: true },
+        },
+      },
     });
 
-    if (!existingProject || existingProject.creatorId !== session.user.id) {
+    const role = existingProject?.memberships[0]?.role;
+    if (!existingProject || (existingProject.creatorId !== session.user.id && role !== "creator" && role !== "manager")) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

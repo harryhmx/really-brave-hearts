@@ -16,6 +16,20 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "storyId is required" }, { status: 400 });
     }
 
+    const localStory = await prisma.story.findUnique({
+      where: { id: storyId },
+      select: { imageUrl: true, audioUrl: true },
+    });
+
+    if (localStory?.imageUrl && localStory.audioUrl) {
+      return NextResponse.json({
+        imageReady: true,
+        audioReady: true,
+        imageUrl: localStory.imageUrl,
+        audioUrl: localStory.audioUrl,
+      });
+    }
+
     const res = await fetch(
       `${RBH_SKILLS_URL}/api/story/status/${storyId}`,
       { headers: { Authorization: "Bearer internal-service-call" } }
@@ -28,15 +42,21 @@ export async function GET(request: Request) {
     const data = await res.json();
 
     if (data.imageReady || data.audioReady) {
-      const story = await prisma.story.findUnique({
-        where: { id: storyId },
-        select: { imageUrl: true, audioUrl: true },
-      });
+      const imageUrl = data.imageUrl ?? localStory?.imageUrl ?? null;
+      const audioUrl = data.audioUrl ?? localStory?.audioUrl ?? null;
+
+      if (imageUrl || audioUrl) {
+        await prisma.story.update({
+          where: { id: storyId },
+          data: { imageUrl, audioUrl },
+        });
+      }
+
       return NextResponse.json({
-        imageReady: !!story?.imageUrl,
-        audioReady: !!story?.audioUrl,
-        imageUrl: story?.imageUrl ?? null,
-        audioUrl: story?.audioUrl ?? null,
+        imageReady: !!imageUrl,
+        audioReady: !!audioUrl,
+        imageUrl,
+        audioUrl,
       });
     }
 

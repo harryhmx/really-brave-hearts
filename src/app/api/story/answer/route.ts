@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { RBH_SKILLS_URL } from "@/lib/config";
+import { persistSkillsStory, upsertStoryProgress } from "@/lib/story-service";
 
 export async function POST(request: Request) {
   try {
@@ -55,6 +56,16 @@ export async function POST(request: Request) {
           data: { score: { increment: 10 }, storyPhase: 2 },
           select: { score: true },
         });
+        if (user.selectedProjectId) {
+          await upsertStoryProgress({
+            userId: user.id,
+            projectId: user.selectedProjectId,
+            storyId: story.id,
+            level: user.level,
+            score: updated.score,
+            phase: 2,
+          });
+        }
 
         return NextResponse.json({
           correct: true,
@@ -72,6 +83,16 @@ export async function POST(request: Request) {
           where: { id: user.id },
           data: { storyPhase: 2 },
         });
+        if (user.selectedProjectId) {
+          await upsertStoryProgress({
+            userId: user.id,
+            projectId: user.selectedProjectId,
+            storyId: story.id,
+            level: user.level,
+            score: user.score,
+            phase: 2,
+          });
+        }
       }
 
       return NextResponse.json({
@@ -93,7 +114,7 @@ export async function POST(request: Request) {
 
       const project = await prisma.project.findUnique({
         where: { id: user.selectedProjectId },
-        select: { id: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true },
+        select: { id: true, slug: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true },
       });
 
       if (!project) {
@@ -123,6 +144,7 @@ export async function POST(request: Request) {
           body: JSON.stringify({
             project_title: project.title,
             project_description: project.description ?? "",
+            project_slug: project.slug,
             user_age: user.age,
             user_level: user.level,
             project_id: project.id,
@@ -146,7 +168,12 @@ export async function POST(request: Request) {
         }
 
         const skillsData = await skillsRes.json();
-        nextStory = skillsData.story;
+        nextStory = await persistSkillsStory({
+          projectId: project.id,
+          age: user.age!,
+          level: user.level!,
+          story: skillsData.story,
+        });
         mediaReady = skillsData.mediaReady ?? false;
       }
 
@@ -163,6 +190,14 @@ export async function POST(request: Request) {
           selectedStoryId: nextStory.id,
           storyPhase: 0,
         },
+      });
+      await upsertStoryProgress({
+        userId: user.id,
+        projectId: project.id,
+        storyId: nextStory.id,
+        level: user.level,
+        score: user.score,
+        phase: 0,
       });
 
       return NextResponse.json({ story: nextStory, mediaReady });

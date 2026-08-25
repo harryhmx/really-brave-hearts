@@ -23,15 +23,26 @@ export default async function StoryPage() {
       storyPhase: true,
       score: true,
       selectedProject: { select: { title: true, slug: true } },
-      createdProjects: {
-        where: { contentModel: "story" },
+      memberships: {
+        where: {
+          role: { in: ["creator", "manager"] },
+          project: { contentModel: "story" },
+        },
+        orderBy: { createdAt: "asc" },
         take: 1,
         select: {
-          id: true,
-          title: true,
-          description: true,
-          systemPrompt: true,
-          conclusionPrompt: true,
+          role: true,
+          project: {
+            select: {
+              id: true,
+              slug: true,
+              title: true,
+              description: true,
+              systemPrompt: true,
+              conclusionPrompt: true,
+              contentModel: true,
+            },
+          },
         },
       },
     },
@@ -40,46 +51,47 @@ export default async function StoryPage() {
   if (!user) redirect("/api/auth/signout?callbackUrl=/login");
 
   // Creator management view
-  const creatorProject = user.createdProjects[0];
+  const creatorProject = user.memberships[0]?.project;
   if (creatorProject) {
 
     return (
-      <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
-        <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
-          <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
-            <h2 className="text-xl font-bold text-white">{creatorProject.title}</h2>
+      <div className="mx-auto max-w-3xl px-6 py-10 sm:px-10">
+        <div className="overflow-hidden rounded-md border border-rbh-ink/10 bg-rbh-panel/45">
+          <div className="border-b border-rbh-ink/10 bg-rbh-header px-6 py-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rbh-gold">PROJECT MANAGEMENT</p>
+            <h2 className="mt-2 text-xl font-bold text-rbh-header-text">{creatorProject.title}</h2>
           </div>
           <div className="p-6 space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Description</h3>
-              <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
+              <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-md bg-rbh-paper p-4 font-mono text-sm text-rbh-ink/80">
                 {creatorProject.description || "—"}
               </pre>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">System Prompt</h3>
-              <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
+              <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-md bg-rbh-paper p-4 font-mono text-sm text-rbh-ink/80">
                 {creatorProject.systemPrompt || "—"}
               </pre>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Conclusion Prompt</h3>
-              <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
+              <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-md bg-rbh-paper p-4 font-mono text-sm text-rbh-ink/80">
                 {creatorProject.conclusionPrompt || "—"}
               </pre>
             </div>
 
             <div className="flex gap-3">
-              <Link href="/story/edit" className="flex-1">
-                <button className="w-full h-11 bg-gradient-to-r from-[#ff6b95] to-[#a855f7] text-white rounded-xl flex items-center justify-center gap-2 hover:from-[#ff527b] hover:to-[#9333ea] transition-all">
+              <Link href={`/project/${creatorProject.slug}/manage`} className="flex-1">
+                <button className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-rbh-coral text-white transition-all hover:brightness-95">
                   <Edit className="h-4 w-4" />
                   Edit
                 </button>
               </Link>
-              <Link href={`/project/${user.selectedProject?.slug ?? "adventure-academy"}`} className="flex-1">
-                <button className="w-full h-11 rounded-xl border border-pink-100 dark:border-pink-900/30 text-muted-foreground hover:bg-pink-50/50 dark:hover:bg-pink-900/5 transition-colors flex items-center justify-center gap-2">
+              <Link href={`/project/${creatorProject.slug}`} className="flex-1">
+                <button className="flex h-11 w-full items-center justify-center gap-2 rounded-md border border-rbh-ink/15 text-rbh-muted transition-colors hover:bg-rbh-teal/10">
                   <ArrowLeft className="h-4 w-4" />
                   Back
                 </button>
@@ -110,9 +122,9 @@ export default async function StoryPage() {
 
   return (
     <>
-      <div className="fixed top-20 right-6 z-50 flex items-center gap-2 rounded-full bg-gradient-to-r from-[#ffd700] to-[#ffa500] px-4 py-2 shadow-lg shadow-orange-200/50 dark:shadow-orange-900/30 hover:scale-105 transition-transform cursor-default">
-        <Star className="h-5 w-5 text-white" />
-        <span className="font-bold text-white">{user.score}</span>
+      <div className="fixed right-6 top-20 z-50 flex items-center gap-2 rounded-full bg-rbh-gold px-4 py-2 text-rbh-header shadow-lg transition-transform hover:scale-105">
+        <Star className="h-5 w-5" />
+        <span className="font-bold">{user.score}</span>
       </div>
 
       <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">

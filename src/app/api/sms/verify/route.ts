@@ -9,9 +9,12 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    const data = await res.json();
+    const data = await res.json().catch(() => ({ message: "SMS service returned an invalid response" }));
     return NextResponse.json(data, { status: res.status });
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.name === "TimeoutError") {
+      return NextResponse.json({ message: "SMS service timed out" }, { status: 504 });
+    }
     return NextResponse.json({ message: "Network error" }, { status: 502 });
   }
 }

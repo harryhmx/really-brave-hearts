@@ -1,8 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import StartStoryButton from "@/components/start-story-button";
+import ProfileForm from "@/components/profile-form";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -19,6 +21,10 @@ async function getProject(slug: string) {
       contentModel: true,
       imageUrl: true,
       creatorId: true,
+      articles: {
+        orderBy: { createdAt: "desc" },
+        select: { slug: true, title: true, excerpt: true, access: true },
+      },
     },
   });
 }
@@ -40,8 +46,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project) notFound();
 
   const projectPath = `/project/${project.slug}`;
+  const profile = session?.user?.id
+    ? await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { age: true, level: true },
+      })
+    : null;
   const isAaCreator =
     project.slug === "adventure-academy" && project.creatorId === session?.user?.id;
+  const membership = session?.user?.id
+    ? await prisma.projectMembership.findUnique({
+        where: { userId_projectId: { userId: session.user.id, projectId: project.id } },
+        select: { role: true },
+      })
+    : null;
+  const canManage = membership?.role === "creator" || membership?.role === "manager" || project.creatorId === session?.user?.id;
   return (
     <div className="bg-rbh-paper text-rbh-ink">
       <section className="border-b border-rbh-ink/10 bg-rbh-panel">
@@ -52,13 +71,32 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <p className="mt-6 max-w-xl text-lg leading-8 text-rbh-ink/70">{project.description || "Explore this Really Brave Hearts project."}</p>
             {project.contentModel === "story" && !isAaCreator && (
               <div className="mt-8">
-                <StartStoryButton projectId={project.id} isAuthenticated={!!session?.user} callbackUrl={projectPath} />
+                {!session?.user ? (
+                  <StartStoryButton projectId={project.id} projectSlug={project.slug} isAuthenticated={false} callbackUrl={projectPath} />
+                ) : !profile?.age || !profile.level ? (
+                  <div className="max-w-md rounded-md border border-rbh-teal/20 bg-rbh-teal/5 p-5">
+                    <p className="text-sm font-semibold text-rbh-ink">Complete your learning profile to start</p>
+                    <p className="mt-1 text-sm leading-6 text-rbh-ink/65">Add your age and Lexile level so Adventure Academy can tailor your first story.</p>
+                    <div className="mt-5">
+                      <ProfileForm />
+                    </div>
+                  </div>
+                ) : (
+                  <StartStoryButton projectId={project.id} projectSlug={project.slug} isAuthenticated={true} callbackUrl={projectPath} />
+                )}
               </div>
             )}
             {isAaCreator && (
               <p className="mt-8 max-w-md rounded-md border border-rbh-teal/25 bg-rbh-teal/10 px-4 py-3 text-sm leading-6 text-rbh-ink/70">
                 You are the Adventure Academy creator. Learning access is reserved for registered students.
               </p>
+            )}
+            {canManage && (
+              <div className="mt-4">
+                <Link href={`${projectPath}/manage`} className="inline-flex h-10 items-center rounded-md border border-rbh-teal/30 px-4 text-sm font-semibold text-rbh-teal transition-colors hover:bg-rbh-teal/10">
+                  Manage project
+                </Link>
+              </div>
             )}
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-rbh-panel">
@@ -74,7 +112,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <section id="related-articles" className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:py-24">
         <div className="max-w-4xl">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rbh-teal">RELATED ARTICLES</p>
-          <p className="mt-4 text-lg font-medium text-rbh-ink/50">No Article</p>
+          {project.articles.length === 0 ? (
+            <p className="mt-4 rounded-md border border-dashed border-rbh-ink/15 px-5 py-6 text-lg font-medium text-rbh-ink/50">No Article</p>
+          ) : (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {project.articles.map((article) => (
+                <article key={article.slug} className="rounded-md border border-rbh-ink/10 bg-rbh-panel/50 p-5">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-rbh-coral">{article.access}</p>
+                  <h2 className="mt-2 text-xl font-semibold">{article.title}</h2>
+                  {article.excerpt && <p className="mt-2 text-sm leading-6 text-rbh-ink/65">{article.excerpt}</p>}
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

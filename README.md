@@ -1,126 +1,55 @@
 # Really Brave Hearts (RBH)
 
-> A gamified English learning platform for children aged 6-12 years
+Really Brave Hearts is a global education brand built around one belief: AI should help people learn with more curiosity, confidence, and purpose.
 
-## Project Overview
+RBH brings together AI technology, thoughtful learning design, and playful experiences to make education more personal, creative, and useful. The brand is not limited to one age group or one subject. It creates room for children, adults, families, and future communities of learners to explore ideas in ways that fit their lives.
 
-**Really Brave Hearts** is an interactive learning platform designed to make English learning fun and engaging for children. The platform features:
+## Our perspective
 
-- **4 Difficulty Levels**: Tailored content for different age groups (6-7, 7-8, 8-10, 10-12 years)
-- **6 Question Types**: fix, open, multiple_choice, matching, spelling, audio
-- **Gamification**: Points, levels, achievements, and streak tracking
-- **AI-Powered**: Content generation using Zhipu AI GLM-5
+RBH treats learning as a lived experience rather than a fixed sequence of lessons. We design experiences that encourage people to:
 
-## Migration Status
+- stay curious and ask better questions;
+- learn through stories, projects, and meaningful challenges;
+- use AI as a creative and supportive partner;
+- build practical confidence alongside knowledge;
+- keep growing across different ages, cultures, and ambitions.
 
-This is a **rewrite project** migrating from Vue 3 + Django (separate codebases) to a unified Next.js 15 full-stack architecture.
+The visual and editorial language of RBH is warm, optimistic, human, and exploratory. Technology is present, but it serves the learner rather than becoming the story itself.
 
-### Previous Architecture
-```
-┌─────────────┐        HTTP API        ┌─────────────┐
-│  Vue 3 SPA  │ ◄─────────────────────► │   Django    │
-│  (前端)      │                          │  (后端)     │
-└─────────────┘                          └─────────────┘
-```
+## RBH projects
 
-### Current Architecture
-```
-┌────────────────────────────────────────────────┐
-│                Next.js 15 App                  │
-│  ┌─────────────────────────────────────────┐   │
-│  │        Frontend (React + Tailwind)      │   │
-│  └─────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────┐   │
-│  │       API Routes + Server Actions       │   │
-│  └─────────────────────────────────────────┘   │
-│  ┌─────────────────────────────────────────┐   │
-│  │   Prisma ORM + PostgreSQL (Supabase)    │   │
-│  └─────────────────────────────────────────┘   │
-└────────────────────────────────────────────────┘
-```
+### Adventure Academy
 
-## Tech Stack
+Adventure Academy is RBH's story-driven learning project for young explorers. Learners enter short, illustrated adventures shaped around their age and reading level. Each chapter combines:
 
-| Category | Technology |
-|----------|-----------|
-| Framework | [Next.js 15](https://nextjs.org/) with App Router |
-| Language | TypeScript |
-| Styling | [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/) |
-| Authentication | [NextAuth.js v5](https://authjs.dev/) |
-| Database | [Prisma ORM](https://www.prisma.io/) + [Supabase](https://supabase.com/) |
-| Deployment | [Vercel](https://vercel.com/) with auto-deploy on push |
-| AI Integration | [Zhipu AI GLM-5](https://open.bigmodel.cn/) |
+- an original story and narrated audio;
+- a visual world that makes reading inviting;
+- reading-comprehension questions;
+- critical-thinking choices that shape what happens next;
+- a gentle progression from one chapter to the next.
 
-## Project Structure
+Adventure Academy uses adventure to make language practice feel purposeful. The learner is not only answering questions; they are making decisions, noticing consequences, and building confidence through the journey.
 
-```
-really-brave-hearts/
-├── core/                   # Main Next.js application
-│   ├── src/
-│   │   ├── app/           # App Router pages
-│   │   ├── components/    # Reusable components
-│   │   ├── lib/           # Utility functions
-│   │   └── styles/        # Global styles
-│   ├── prisma/            # Database schema
-│   └── public/            # Static assets
-├── docs/                  # Project documentation
-│   ├── execution-log.md   # Development execution log
-│   └── MIGRATION_PLAN.md  # Migration roadmap
-└── .internal/             # Internal documentation
-```
+### Explore AI
 
-## Getting Started
+Explore AI is a practical space for discovering how AI can make learning more personal, creative, and useful for people at every age.
 
-### Prerequisites
+It is designed for experiments, tools, reflections, and accessible examples that help people understand what AI can do in everyday learning. Explore AI may serve children, adults, educators, families, and curious professionals as the project grows.
 
-- Node.js 18+
-- npm or yarn
-- PostgreSQL database (local or Vercel Postgres)
-- GitHub account (for deployment)
+## A growing project family
 
-### Installation
+Adventure Academy and Explore AI are the first visible projects in the RBH ecosystem, not its final boundaries. Future RBH projects may explore:
 
-```bash
-# Clone the repository
-git clone git@github.com:harryhmx/really-brave-hearts.git
+- learning experiences for adults and families;
+- creative and practical skill development;
+- subject-specific journeys;
+- collaborative learning communities;
+- new ways for AI to support reflection, practice, and discovery.
 
-# Install dependencies
-npm install
+Each project can have its own tone, audience, and method while sharing the RBH commitment to brave, curious, human-centered learning.
 
-# Set up database
-npx prisma generate
-npx prisma db push
+## The RBH experience
 
-# Run development server
-npm run dev
-```
+RBH is a place to begin somewhere meaningful, follow your curiosity, and keep moving forward. Whether a learner is entering an illustrated adventure, experimenting with an AI tool, or discovering a completely new project, the experience should feel welcoming, purposeful, and alive.
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Development Workflow
-
-This project uses an agile development approach with continuous deployment:
-
-1. **Feature Development**: Declare features in commit messages
-2. **Auto-Deploy**: Push to main → Vercel auto-deploys
-3. **Production Update**: Changes go live immediately after successful deploy
-
-```bash
-# Check status
-git status
-
-# Make changes and commit
-git add .
-git commit -m "feat: your feature description"
-
-# Push and create PR
-git push origin main
-```
-
-## License
-
-MIT
-
----
-
-Built with ❤️ for young learners
+**Learn bravely. Live curiously.**
