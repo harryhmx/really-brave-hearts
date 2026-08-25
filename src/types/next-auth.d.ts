@@ -7,7 +7,6 @@ declare module "next-auth" {
       username: string;
       level: string | null;
       score: number;
-      usertype: string;
     } & DefaultSession["user"];
   }
 
@@ -15,7 +14,6 @@ declare module "next-auth" {
     username?: string;
     level?: string;
     score?: number;
-    usertype?: string;
   }
 }
 
@@ -25,6 +23,5 @@ declare module "next-auth/jwt" {
     username: string;
     level: string | undefined;
     score: number;
-    usertype: string;
   }
 }

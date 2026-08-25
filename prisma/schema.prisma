@@ -11,24 +11,24 @@ datasource db {
 
 // User model
 model User {
-  id                String    @id @default(cuid())
-  username          String    @unique
-  email             String?   @unique
+  id                String   @id @default(cuid())
+  username          String   @unique
+  email             String?  @unique
   password          String
-  usertype          String    @default("student")
   level             String?
-  score             Int       @default(0)
-  phoneNumber       String?   @unique
+  score             Int      @default(0)
+  phoneNumber       String?  @unique
   age               Int?
   selectedProjectId String?
   selectedStoryId   String?
-  storyPhase        Int       @default(0)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  storyPhase        Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  sessions         Session[]
-  selectedProject  Project?  @relation("SelectedProject", fields: [selectedProjectId], references: [id])
-  selectedStory    Story?    @relation("SelectedStory", fields: [selectedStoryId], references: [id])
+  sessions        Session[]
+  selectedProject Project?  @relation("SelectedProject", fields: [selectedProjectId], references: [id])
+  selectedStory   Story?    @relation("SelectedStory", fields: [selectedStoryId], references: [id])
+  createdProjects Project[] @relation("ProjectCreator")
 }
 
 // NextAuth Session model
@@ -43,38 +43,43 @@ model Session {
 // Project model — higher-level grouping
 model Project {
   id               String   @id @default(cuid())
+  slug             String   @unique
   title            String
   description      String?
+  contentModel     String?
+  imageUrl         String?  @db.Text
+  creatorId        String?
   systemPrompt     String?  @db.Text
   conclusionPrompt String?  @db.Text
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   stories         Story[]
-  selectedByUsers User[] @relation("SelectedProject")
+  selectedByUsers User[]  @relation("SelectedProject")
+  creator         User?   @relation("ProjectCreator", fields: [creatorId], references: [id], onDelete: SetNull)
 }
 
 // Story model — maps to old project's Project
 model Story {
-  id              String   @id @default(cuid())
-  title           String
-  content         String?  @db.Text
-  imageUrl        String?  @db.Text
-  audioUrl        String?  @db.Text
-  rcQuestion      String?  @db.Text
-  rcAnswer        String?
-  ctQuestion      String?  @db.Text
-  age             Int
-  level           String
-  projectId       String
-  requireStoryId  String?
-  requireChoice   String?
-  depth           Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String   @id @default(cuid())
+  title          String
+  content        String?  @db.Text
+  imageUrl       String?  @db.Text
+  audioUrl       String?  @db.Text
+  rcQuestion     String?  @db.Text
+  rcAnswer       String?
+  ctQuestion     String?  @db.Text
+  age            Int
+  level          String
+  projectId      String
+  requireStoryId String?
+  requireChoice  String?
+  depth          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  project        Project        @relation(fields: [projectId], references: [id])
-  selectedByUsers User[]        @relation("SelectedStory")
-  requireStory    Story?         @relation("StoryBranch", fields: [requireStoryId], references: [id])
-  childStories    Story[]        @relation("StoryBranch")
+  project         Project @relation(fields: [projectId], references: [id])
+  selectedByUsers User[]  @relation("SelectedStory")
+  requireStory    Story?  @relation("StoryBranch", fields: [requireStoryId], references: [id])
+  childStories    Story[] @relation("StoryBranch")
 }

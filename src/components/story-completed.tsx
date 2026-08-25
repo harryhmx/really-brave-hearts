@@ -17,11 +17,13 @@ export default function StoryCompleted({
   userName,
   projectTitle,
   projectId,
+  projectSlug,
   score,
 }: {
   userName: string;
   projectTitle: string;
   projectId: string;
+  projectSlug?: string;
   score: number;
 }) {
   const displayName = userName
@@ -37,7 +39,7 @@ export default function StoryCompleted({
     setRestartLoading(true);
     try {
       await fetch("/api/story/reset", { method: "POST" });
-      window.location.href = "/dashboard";
+      window.location.href = projectSlug ? `/project/${projectSlug}` : "/dashboard";
     } catch {
       setRestartLoading(false);
     }

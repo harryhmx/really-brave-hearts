@@ -18,53 +18,56 @@ export default async function StoryPage() {
     where: { id: session.user.id },
     select: {
       username: true,
-      usertype: true,
       selectedStoryId: true,
       selectedProjectId: true,
       storyPhase: true,
       score: true,
-      selectedProject: { select: { title: true } },
+      selectedProject: { select: { title: true, slug: true } },
+      createdProjects: {
+        where: { contentModel: "story" },
+        take: 1,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          systemPrompt: true,
+          conclusionPrompt: true,
+        },
+      },
     },
   });
 
   if (!user) redirect("/api/auth/signout?callbackUrl=/login");
 
-  // Teacher view
-  if (user.usertype === "teacher") {
-    const project = await prisma.project.findFirst({
-      select: {
-        id: true, title: true, description: true,
-        systemPrompt: true, conclusionPrompt: true,
-      },
-    });
-
-    if (!project) redirect("/dashboard");
+  // Creator management view
+  const creatorProject = user.createdProjects[0];
+  if (creatorProject) {
 
     return (
       <div className="container mx-auto max-w-2xl px-4 py-8 animate-fade-in-up">
         <div className="rounded-2xl border border-pink-100 dark:border-pink-900/30 bg-white dark:bg-[#22103a] overflow-hidden shadow-lg shadow-pink-100/50 dark:shadow-pink-900/10">
           <div className="bg-gradient-to-r from-[#ff6b95] to-[#a855f7] px-6 py-4">
-            <h2 className="text-xl font-bold text-white">{project.title}</h2>
+            <h2 className="text-xl font-bold text-white">{creatorProject.title}</h2>
           </div>
           <div className="p-6 space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Description</h3>
               <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
-                {project.description || "—"}
+                {creatorProject.description || "—"}
               </pre>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">System Prompt</h3>
               <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
-                {project.systemPrompt || "—"}
+                {creatorProject.systemPrompt || "—"}
               </pre>
             </div>
 
             <div>
               <h3 className="text-sm font-semibold text-muted-foreground mb-1">Conclusion Prompt</h3>
               <pre className="whitespace-pre-wrap text-sm text-[#4a148c] dark:text-[#c4a8e8] bg-muted/30 dark:bg-muted/10 rounded-xl p-4 max-h-80 overflow-y-auto font-mono">
-                {project.conclusionPrompt || "—"}
+                {creatorProject.conclusionPrompt || "—"}
               </pre>
             </div>
 
@@ -75,7 +78,7 @@ export default async function StoryPage() {
                   Edit
                 </button>
               </Link>
-              <Link href="/dashboard" className="flex-1">
+              <Link href={`/project/${user.selectedProject?.slug ?? "adventure-academy"}`} className="flex-1">
                 <button className="w-full h-11 rounded-xl border border-pink-100 dark:border-pink-900/30 text-muted-foreground hover:bg-pink-50/50 dark:hover:bg-pink-900/5 transition-colors flex items-center justify-center gap-2">
                   <ArrowLeft className="h-4 w-4" />
                   Back
@@ -89,7 +92,7 @@ export default async function StoryPage() {
   }
 
   // Student view
-  if (!user.selectedStoryId) redirect("/dashboard");
+  if (!user.selectedStoryId) redirect(`/project/${user.selectedProject?.slug ?? "adventure-academy"}`);
 
   const story = await prisma.story.findUnique({
     where: { id: user.selectedStoryId },
@@ -101,7 +104,7 @@ export default async function StoryPage() {
     },
   });
 
-  if (!story) redirect("/dashboard");
+  if (!story) redirect(`/project/${user.selectedProject?.slug ?? "adventure-academy"}`);
 
   const isConclusion = (story.depth + 1) % 4 === 0;
 
@@ -129,6 +132,7 @@ export default async function StoryPage() {
           userName={user.username}
           projectTitle={user.selectedProject?.title ?? "Story"}
           projectId={user.selectedProjectId}
+          projectSlug={user.selectedProject?.slug}
           score={user.score}
         />
       )}

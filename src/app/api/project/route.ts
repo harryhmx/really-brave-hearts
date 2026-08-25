@@ -9,20 +9,20 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { usertype: true },
-    });
-
-    if (user?.usertype !== "teacher") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const body = await request.json();
     const { id, title, description, systemPrompt, conclusionPrompt } = body;
 
     if (!id || !title) {
       return NextResponse.json({ error: "id and title are required" }, { status: 400 });
+    }
+
+    const existingProject = await prisma.project.findUnique({
+      where: { id },
+      select: { creatorId: true },
+    });
+
+    if (!existingProject || existingProject.creatorId !== session.user.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const project = await prisma.project.update({

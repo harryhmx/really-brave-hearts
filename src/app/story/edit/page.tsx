@@ -9,14 +9,11 @@ export default async function StoryEditPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    select: { usertype: true },
-  });
-
-  if (user?.usertype !== "teacher") redirect("/dashboard");
-
   const project = await prisma.project.findFirst({
+    where: {
+      creatorId: session.user.id,
+      contentModel: "story",
+    },
     select: {
       id: true, title: true, description: true,
       systemPrompt: true, conclusionPrompt: true,

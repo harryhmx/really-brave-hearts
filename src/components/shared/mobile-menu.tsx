@@ -16,29 +16,43 @@ export function MobileMenu({ session }: { session: boolean }) {
       <Button
         variant="ghost"
         size="icon"
-        className="text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10"
+        className="text-rbh-header-text/75 hover:text-rbh-header-text hover:bg-white/10"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         aria-label="Toggle menu"
       >
         {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#4a148c]/10 dark:border-[#311b92]/15 bg-[#f5f0ff] dark:bg-[#ede4ff] absolute top-14 left-0 right-0">
+        <div className="md:hidden border-t border-rbh-header-text/15 bg-rbh-header absolute top-14 left-0 right-0">
           <nav className="container flex flex-col items-center space-y-3 px-4 py-4 max-w-screen-2xl mx-auto">
             <Link
               href="/dashboard"
-              className="text-sm font-medium text-foreground dark:text-[#311b92] transition-colors hover:text-foreground/80"
+              className="text-sm font-medium text-rbh-header-text transition-colors hover:text-rbh-header-text/80"
               onClick={() => setMobileMenuOpen(false)}
             >
               Dashboard
             </Link>
-            <div className="border-t border-[#4a148c]/10 dark:border-[#311b92]/15 w-full pt-3">
+            <Link
+              href="/project/adventure-academy"
+              className="text-sm font-medium text-rbh-header-text transition-colors hover:text-rbh-header-text/80"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Adventure Academy
+            </Link>
+            <Link
+              href="/project/explore-ai"
+              className="text-sm font-medium text-rbh-header-text transition-colors hover:text-rbh-header-text/80"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Explore AI
+            </Link>
+            <div className="border-t border-rbh-header-text/15 w-full pt-3">
               {session ? (
-                <LogoutButton className="w-full justify-center text-foreground dark:text-[#311b92]/70" />
+                <LogoutButton className="w-full justify-center text-rbh-header-text/75" />
               ) : (
                 <div className="flex flex-col items-center space-y-2">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" size="sm" className="w-full text-foreground dark:text-[#311b92]">
+                    <Button variant="ghost" size="sm" className="w-full text-rbh-header-text">
                       Log In
                     </Button>
                   </Link>

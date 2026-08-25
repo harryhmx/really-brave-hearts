@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
@@ -10,16 +9,24 @@ export default function ProjectCard({
   projectId,
   title,
   description,
+  isAuthenticated = true,
+  callbackUrl = "/dashboard",
 }: {
   projectId: string;
   title: string;
   description: string | null;
+  isAuthenticated?: boolean;
+  callbackUrl?: string;
 }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const countdown = useLoadingTimer(loading, 60);
 
   const handleStart = async () => {
+    if (!isAuthenticated) {
+      window.location.href = `/sms-verify?callbackUrl=${encodeURIComponent(callbackUrl)}`;
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/story", {

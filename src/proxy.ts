@@ -9,9 +9,11 @@ export function proxy(request: NextRequest) {
   const isLoggedIn = !!sessionToken?.value;
 
   const publicRoutes = ["/", "/login", "/register", "/sms-verify"];
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isPublicProjectRoute = nextUrl.pathname.startsWith("/project/");
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || isPublicProjectRoute;
+  const authRoutes = ["/login", "/register", "/sms-verify"];
 
-  if (isLoggedIn && isPublicRoute && nextUrl.pathname !== "/") {
+  if (isLoggedIn && authRoutes.includes(nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/dashboard", nextUrl));
   }
 

@@ -10,16 +10,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
+import { callbackHref, getSafeCallbackUrl } from "@/lib/auth-redirect";
 
 export default function RegisterPage() {
   const { status } = useSession();
   const router = useRouter();
+  const [callbackUrl, setCallbackUrl] = useState("/dashboard");
+  const [redirectReady, setRedirectReady] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard");
+    const params = new URLSearchParams(window.location.search);
+    queueMicrotask(() => {
+      setCallbackUrl(getSafeCallbackUrl(params.get("callbackUrl")));
+      setRedirectReady(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (redirectReady && status === "authenticated") {
+      router.replace(callbackUrl);
     }
-  }, [status, router]);
+  }, [callbackUrl, redirectReady, router, status]);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -56,7 +67,7 @@ export default function RegisterPage() {
         password,
         redirect: false,
       });
-      window.location.href = "/dashboard";
+      window.location.href = callbackUrl;
     }
   };
 
@@ -117,13 +128,13 @@ export default function RegisterPage() {
             </Button>
             <p className="text-sm text-center text-muted-foreground">
               Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href={callbackHref("/login", callbackUrl)} className="text-primary hover:underline">
                 Log In
               </Link>
             </p>
             <p className="text-sm text-center text-muted-foreground">
               Prefer phone number?{" "}
-              <Link href="/sms-verify" className="text-primary hover:underline">
+              <Link href={callbackHref("/sms-verify", callbackUrl)} className="text-primary hover:underline">
                 SMS Verify
               </Link>
             </p>

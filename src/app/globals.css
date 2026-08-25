@@ -9,6 +9,14 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --color-rbh-paper: var(--rbh-paper);
+  --color-rbh-ink: var(--rbh-ink);
+  --color-rbh-panel: var(--rbh-panel);
+  --color-rbh-header: var(--rbh-header);
+  --color-rbh-header-text: var(--rbh-header-text);
+  --color-rbh-coral: var(--rbh-coral);
+  --color-rbh-teal: var(--rbh-teal);
+  --color-rbh-gold: var(--rbh-gold);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -69,6 +77,14 @@
 }
 
 :root {
+  --rbh-paper: #f7f3ea;
+  --rbh-ink: #102a43;
+  --rbh-panel: #e7f0eb;
+  --rbh-header: #102a43;
+  --rbh-header-text: #f7f3ea;
+  --rbh-coral: #e76f51;
+  --rbh-teal: #168f86;
+  --rbh-gold: #d39b27;
   --background: oklch(0.99 0.005 85);
   --foreground: oklch(0.2 0.02 280);
   --card: oklch(1 0.005 85);
@@ -104,6 +120,14 @@
 }
 
 .dark {
+  --rbh-paper: #0f1f2e;
+  --rbh-ink: #e8f0f2;
+  --rbh-panel: #17384a;
+  --rbh-header: #091521;
+  --rbh-header-text: #f7f3ea;
+  --rbh-coral: #f28a6d;
+  --rbh-teal: #4cb8ac;
+  --rbh-gold: #f3c969;
   --background: oklch(0.16 0.02 280);
   --foreground: oklch(0.93 0.01 85);
   --card: oklch(0.22 0.025 280);

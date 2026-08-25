@@ -21,16 +21,22 @@ export async function POST(request: Request) {
       where: { id: session.user.id },
       select: { id: true, age: true, level: true },
     });
-    if (!user?.age || !user?.level) {
-      return NextResponse.json({ error: "Profile incomplete" }, { status: 400 });
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const project = await prisma.project.findUnique({
       where: { id: projectId },
-      select: { id: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true },
+      select: { id: true, slug: true, title: true, description: true, systemPrompt: true, conclusionPrompt: true, creatorId: true },
     });
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+    if (project.slug === "adventure-academy" && project.creatorId === user.id) {
+      return NextResponse.json({ error: "Project creators cannot start student stories" }, { status: 403 });
+    }
+    if (!user?.age || !user?.level) {
+      return NextResponse.json({ error: "Profile incomplete" }, { status: 400 });
     }
 
     let story = freshStory ? null : await prisma.story.findFirst({

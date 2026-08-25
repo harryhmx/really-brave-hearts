@@ -13,7 +13,7 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
+    queueMicrotask(() => setMounted(true))
   }, [])
 
   const session = sessionData?.data
@@ -22,19 +22,25 @@ export function Header() {
   const isMobileMenuLoggedIn = mounted ? !!session?.user : false
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-[#4a148c] to-[#311b92] dark:from-[#e8daff] dark:to-[#d4b8ff]">
+    <header className="sticky top-0 z-50 w-full bg-rbh-header">
       <div className="container flex h-14 max-w-screen-2xl items-center mx-auto px-4">
         {/* Logo */}
         <Link href="/" className="mr-6 flex items-center space-x-2 transition-transform hover:scale-105">
-          <span className="font-bold text-white dark:text-[#311b92] text-lg">
+          <span className="font-bold text-rbh-header-text text-lg">
             RBH
           </span>
         </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <Link href="/project/adventure-academy" className="text-rbh-header-text/75 transition-colors hover:text-rbh-header-text">
+            Adventure Academy
+          </Link>
+          <Link href="/project/explore-ai" className="text-rbh-header-text/75 transition-colors hover:text-rbh-header-text">
+            Explore AI
+          </Link>
           {isLoggedIn && (
-            <Link href="/dashboard" className="text-white/80 dark:text-[#311b92]/70 transition-colors hover:text-white dark:hover:text-[#311b92]">
+            <Link href="/dashboard" className="text-rbh-header-text/75 transition-colors hover:text-rbh-header-text">
               Dashboard
             </Link>
           )}
@@ -44,11 +50,11 @@ export function Header() {
         <div className="hidden md:flex ml-auto items-center space-x-4">
           <ThemeToggle />
           {isLoggedIn ? (
-            <LogoutButton className="text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10" />
+            <LogoutButton className="text-rbh-header-text/75 hover:text-rbh-header-text hover:bg-white/10" />
           ) : (
             <nav className="flex items-center space-x-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10 dark:text-[#311b92]/70 dark:hover:text-[#311b92] dark:hover:bg-[#311b92]/10">
+                <Button variant="ghost" size="sm" className="text-rbh-header-text/75 hover:text-rbh-header-text hover:bg-white/10">
                   Log In
                 </Button>
               </Link>

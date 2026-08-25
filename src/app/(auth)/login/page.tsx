@@ -10,16 +10,31 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
+import { callbackHref, getSafeCallbackUrl } from "@/lib/auth-redirect";
 
 export default function LoginPage() {
   const { status } = useSession();
   const router = useRouter();
+  const [callbackUrl, setCallbackUrl] = useState("/dashboard");
+  const [redirectReady, setRedirectReady] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard");
+    const params = new URLSearchParams(window.location.search);
+    const safeCallbackUrl = getSafeCallbackUrl(params.get("callbackUrl"));
+    queueMicrotask(() => {
+      setCallbackUrl(safeCallbackUrl);
+      setRedirectReady(true);
+      if (params.get("mode") === "sms") {
+        router.replace(callbackHref("/sms-verify", safeCallbackUrl));
+      }
+    });
+  }, [router]);
+
+  useEffect(() => {
+    if (redirectReady && status === "authenticated") {
+      router.replace(callbackUrl);
     }
-  }, [status, router]);
+  }, [callbackUrl, redirectReady, router, status]);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,7 +57,7 @@ export default function LoginPage() {
       setLoading(false);
       setError("Invalid username or password");
     } else {
-      window.location.href = "/dashboard";
+      window.location.href = callbackUrl;
     }
   };
 
@@ -92,7 +107,7 @@ export default function LoginPage() {
             </Button>
             <p className="text-sm text-center text-muted-foreground">
               Prefer phone number?{" "}
-              <Link href="/sms-verify" className="text-primary hover:underline">
+              <Link href={callbackHref("/sms-verify", callbackUrl)} className="text-primary hover:underline">
                 SMS Verify
               </Link>
             </p>

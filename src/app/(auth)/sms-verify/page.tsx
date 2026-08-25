@@ -16,19 +16,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoadingTimer } from "@/hooks/use-loading-timer";
+import { callbackHref, getSafeCallbackUrl } from "@/lib/auth-redirect";
 
 const PHONE_REGEX = /^1[3-9]\d{9}$/;
 const COUNTDOWN_SECONDS = 60;
 
 export default function SmsVerifyPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
+  const [callbackUrl, setCallbackUrl] = useState("/dashboard");
+  const [redirectReady, setRedirectReady] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/dashboard");
+    const params = new URLSearchParams(window.location.search);
+    queueMicrotask(() => {
+      setCallbackUrl(getSafeCallbackUrl(params.get("callbackUrl")));
+      setRedirectReady(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (redirectReady && status === "authenticated") {
+      router.replace(callbackUrl);
     }
-  }, [status, router]);
+  }, [callbackUrl, redirectReady, router, status]);
 
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
@@ -113,7 +124,7 @@ export default function SmsVerifyPage() {
         setError("Failed to create session");
         setVerifyLoading(false);
       } else {
-        router.push("/dashboard");
+        window.location.href = callbackUrl;
       }
     } catch {
       setError("Network error, please try again");
@@ -197,7 +208,7 @@ export default function SmsVerifyPage() {
             </Button>
             <p className="text-sm text-center text-muted-foreground">
               Switch to password mode?{" "}
-              <Link href="/login" className="text-primary hover:underline">
+              <Link href={callbackHref("/login", callbackUrl)} className="text-primary hover:underline">
                 Log In
               </Link>
             </p>
